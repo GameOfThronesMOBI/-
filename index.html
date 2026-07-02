@@ -106,7 +106,7 @@
 
 <script>
 // ============================================================
-// BATTLE CLASS — ПОЛНАЯ ЛОГИКА
+// BATTLE CLASS — ИСПРАВЛЕННАЯ ВЕРСИЯ
 // ============================================================
 class Battle {
     constructor(player, enemy) {
@@ -119,10 +119,6 @@ class Battle {
         this.strategy = 'attack';
         this.turnTime = 8000;
         this.autoMode = false;
-        this.stats = {
-            playerArmyLost: 0,
-            enemyArmyLost: 0
-        };
     }
 
     start() {
@@ -135,7 +131,6 @@ class Battle {
     nextTurn() {
         if (this.phase !== 'active') return;
 
-        // Проверка победы/поражения
         if (this.enemy.army <= 0 || this.enemy.hp <= 0) {
             this.phase = 'victory';
             this.log.push('🎉 ПОБЕДА! Враг разбит!');
@@ -153,12 +148,10 @@ class Battle {
 
         if (this.turn === 'player') {
             if (this.autoMode) {
-                // Автоматический выбор стратегии
                 const strategies = ['attack', 'defend', 'flank', 'siege'];
                 this.strategy = strategies[Math.floor(Math.random() * strategies.length)];
                 this.playerTurn();
             } else {
-                // Ждём выбора игрока
                 this.updateUI();
             }
         } else {
@@ -206,7 +199,6 @@ class Battle {
                 message = `⚔️ Атака! Нанесено ${Math.round(damage)} урона.`;
         }
 
-        // Ответ врага
         const response = this.enemyResponse();
         this.log.push(message + ' ' + response);
         this.turn = 'enemy';
@@ -333,7 +325,6 @@ class Battle {
         const eHpPercent = Math.max(0, (e.hp / this.enemy.maxHp) * 100);
         document.getElementById('e-hp-fill').style.width = eHpPercent + '%';
 
-        // Статус
         const badge = document.getElementById('status-badge');
         if (status.phase === 'victory') {
             badge.textContent = '🎉 ПОБЕДА!';
@@ -346,7 +337,6 @@ class Battle {
             badge.className = 'status-badge badge-active';
         }
 
-        // Лог
         const logBox = document.getElementById('log-box');
         const logEntries = this.getLog();
         logBox.innerHTML = logEntries.map(msg => 
@@ -354,11 +344,9 @@ class Battle {
         ).join('') || '<div class="log-entry" style="color:#6a5a48;">📜 Лог пуст</div>';
         logBox.scrollTop = logBox.scrollHeight;
 
-        // Сообщение
         const lastLog = this.log[this.log.length - 1] || '';
         document.getElementById('game-message').textContent = lastLog;
 
-        // Кнопки
         this.updateButtons(status);
     }
 
@@ -457,4 +445,4 @@ function toggleAuto() {
 startBattle();
 </script>
 </body>
-    </html>
+</html>
