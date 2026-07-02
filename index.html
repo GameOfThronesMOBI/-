@@ -1,621 +1,266 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>⚔️ ОСАДА ЗАМКА | Тест</title>
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-        body { background:#0d0a08; font-family:'Georgia',serif; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:10px; }
-        #app { max-width:500px; width:100%; background:#1f1712; border:1px solid #3d3026; border-radius:20px; padding:16px 14px; box-shadow:0 20px 50px rgba(0,0,0,0.9); }
-        .header { text-align:center; border-bottom:1px solid #3d3026; padding-bottom:10px; margin-bottom:12px; }
-        .header h1 { color:#c9b694; font-size:20px; font-weight:400; letter-spacing:4px; }
-        .header h2 { color:#6a5a48; font-size:11px; font-weight:400; letter-spacing:6px; }
-        .btn { width:100%; padding:12px 14px; border:1px solid #3d3026; border-radius:10px; font-family:'Georgia',serif; font-size:14px; cursor:pointer; text-align:center; margin-top:6px; background:#2a201a; color:#c9b694; transition:0.2s; }
-        .btn:active { background:#3d3026; transform:scale(0.98); }
-        .btn-primary { background:#3d2e20; color:#c9b694; }
-        .btn-danger { background:#2a1a12; color:#c96a5a; border-color:#4a2a20; }
-        .btn-success { background:#122a1a; color:#7ac98a; border-color:#2a4a2a; }
-        .btn-small { display:inline-block; width:auto; padding:4px 12px; margin:0; font-size:12px; }
-        .row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:13px; color:#b8a890; border-bottom:1px solid #1a1410; gap:8px; }
-        .row .label { color:#7a6a58; flex:1; }
-        .row .value { color:#c9b694; text-align:right; white-space:nowrap; }
-        .hide { display:none !important; }
-        .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:flex; justify-content:center; align-items:center; z-index:1000; padding:15px; }
-        .modal-overlay.hide { display:none; }
-        .modal-box { background:#1f1712; border:1px solid #3d3026; border-radius:16px; padding:20px 18px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; }
-        .modal-box .modal-header { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3d3026; padding-bottom:10px; margin-bottom:14px; }
-        .modal-box .modal-header h3 { color:#c9b694; font-size:18px; font-weight:400; letter-spacing:2px; }
-        .modal-box .modal-header .close-btn { background:none; border:none; color:#6a5a48; font-size:24px; cursor:pointer; padding:0 8px; }
-        .modal-section { margin-bottom:14px; }
-        .modal-section h4 { color:#6a5a48; font-size:14px; font-weight:400; letter-spacing:1px; border-bottom:1px solid #2a201a; padding-bottom:4px; margin-bottom:8px; }
-        .story-box { background:#120e0b; border:1px solid #2a201a; border-radius:12px; padding:14px; margin-bottom:12px; min-height:100px; }
-        .story-box h4 { color:#6a5a48; font-size:15px; font-weight:400; margin-bottom:6px; }
-        .story-box p { color:#b8a890; font-size:14px; line-height:1.7; white-space:pre-line; }
-        .game-msg { color:#6a5a48; font-style:italic; margin-top:10px; padding-top:8px; border-top:1px solid #1f1712; font-size:13px; min-height:20px; }
-        .action-group { margin-top:10px; padding-top:10px; border-top:1px solid #1f1712; }
-        .action-group p { color:#6a5a48; font-size:13px; margin-bottom:6px; letter-spacing:1px; }
-        .btn-game { background:#2a201a; border:1px solid #3d3026; color:#c9b694; padding:11px 14px; border-radius:10px; font-size:14px; cursor:pointer; width:100%; text-align:left; margin-top:5px; }
-        .btn-game:active { background:#3d3026; }
-        .btn-game:disabled { opacity:0.4; pointer-events:none; }
-        .status-busy { color:#c96a5a; font-size:13px; text-align:center; padding:6px; background:#1a0e0a; border-radius:8px; margin-bottom:8px; }
-        .status-busy.hide { display:none; }
-        .menu-bar { background:#120e0b; border:1px solid #2a201a; border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:13px; line-height:1.5; color:#b8a890; }
-        .menu-stats { display:flex; justify-content:space-between; flex-wrap:wrap; padding:2px 0; }
-        .menu-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; padding-top:6px; border-top:1px solid #1a1410; }
-        .menu-btn { flex:1; min-width:55px; padding:6px; background:#2a201a; border:1px solid #3d3026; border-radius:8px; color:#c9b694; font-family:'Georgia',serif; font-size:11px; cursor:pointer; text-align:center; }
-        .menu-btn:active { background:#3d3026; transform:scale(0.96); }
-        .footer { text-align:center; color:#2a201a; font-size:10px; margin-top:14px; padding-top:10px; border-top:1px solid #1f1712; letter-spacing:3px; }
-        .badge-green { color:#7ac98a; }
-        .badge-red { color:#c96a5a; }
-        .badge-yellow { color:#ffd700; }
-        .hp-bar { height:12px; background:#1a1410; border-radius:6px; overflow:hidden; margin:4px 0; }
-        .hp-fill { height:100%; background:#7ac98a; transition:width 0.3s; border-radius:6px; }
-        .hp-fill.danger { background:#c96a5a; }
-        .siege-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px; }
-        .siege-card { background:#120e0b; border:1px solid #2a201a; border-radius:10px; padding:10px; text-align:center; cursor:pointer; }
-        .siege-card:active { background:#1f1712; }
-        .siege-card .card-title { color:#c9b694; font-size:13px; }
-        .siege-card .card-status { font-size:11px; margin-top:4px; }
-    </style>
-</head>
-<body>
-<div id="app">
-    <div class="header"><h1>⚔️ ОСАДА ЗАМКА</h1><h2>ТЕСТОВЫЙ РЕЖИМ</h2></div>
-
-    <div id="game">
-        <div class="menu-bar">
-            <div class="menu-stats">
-                <div>👤 <span id="p-name">Тестовый Лорд</span> (ур. <span id="p-level">100</span>)</div>
-                <div>❤️ <span id="p-hp">999</span>/<span id="p-maxhp">999</span></div>
-                <div>⚔️ <span id="p-damage">100</span> | 🛡️ <span id="p-defense">100</span></div>
-            </div>
-            <div class="hp-bar"><div class="hp-fill" id="hp-fill" style="width:100%"></div></div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;color:#6a5a48;margin-top:4px;">
-                <span>👥 Армия: <span id="p-army">500</span></span>
-                <span>🏰 Замок: <span id="castle-name">Утёс Кастерли</span></span>
-            </div>
-        </div>
-
-        <div id="busy-status" class="status-busy hide">⏳ Идёт осада...</div>
-
-        <div class="story-box">
-            <h4 id="story-title">🏰 ОСАДА УТЁСА КАСТЕРЛИ</h4>
-            <p id="story-text">Вы подошли к стенам замка. Начинайте осаду!</p>
-            <div id="game-message" class="game-msg"></div>
-        </div>
-
-        <div id="actions-container"></div>
-
-        <button class="btn btn-danger" onclick="resetSiege()" style="margin-top:10px;">🔄 Начать заново</button>
-        <button class="btn" onclick="toggleDebug()" style="margin-top:4px;">🐞 Режим Бога</button>
-    </div>
-
-    <div class="footer">❄️ ЗИМА БЛИЗКО</div>
-</div>
-
-<!-- Модальное окно -->
-<div id="modal" class="modal-overlay hide" onclick="if(event.target===this) closeModal()">
-    <div class="modal-box">
-        <div class="modal-header">
-            <h3 id="modal-title">📋</h3>
-            <button class="close-btn" onclick="closeModal()">✕</button>
-        </div>
-        <div id="modal-content"></div>
-    </div>
-</div>
-
-<script>
 // ============================================================
-// КОНСТАНТЫ И НАСТРОЙКИ
+// BATTLE.JS — НОВАЯ БОЕВАЯ СИСТЕМА
 // ============================================================
-const DEBUG = true; // Режим бога (выключи на false для честной игры)
 
-// ============================================================
-// СОСТОЯНИЕ ОСАДЫ
-// ============================================================
-let siege = {
-    // Игрок
-    player: {
-        name: 'Тестовый Лорд',
-        level: 100,
-        hp: 999,
-        maxHp: 999,
-        damage: 100,
-        defense: 100,
-        army: 500,       // живых солдат
-        maxArmy: 500,
-        equipment: {
-            weapon: { name: 'Валирийский меч', damage: 50, valyrian: true },
-            armor: { name: 'Валирийский доспех', defense: 50, valyrian: true },
-            shield: { name: 'Валирийский щит', defense: 30, valyrian: true }
+class Battle {
+    constructor(player, enemy) {
+        this.player = player;       // { hp, maxHp, damage, defense, agility, army }
+        this.enemy = enemy;         // { hp, maxHp, damage, defense, agility, army, morale }
+        this.turn = 'player';
+        this.phase = 'active';      // 'active' | 'victory' | 'defeat'
+        this.log = [];
+        this.timer = null;
+        this.strategy = 'attack';   // 'attack' | 'defend' | 'flank' | 'siege'
+        this.turnTime = 10000;      // 10 секунд на ход
+    }
+
+    // ============================================================
+    // СТАРТ БОЯ
+    // ============================================================
+    start() {
+        this.log.push('⚔️ Бой начался!');
+        this.nextTurn();
+        return this;
+    }
+
+    // ============================================================
+    // ХОД
+    // ============================================================
+    nextTurn() {
+        if (this.phase !== 'active') return;
+
+        // Проверка победы/поражения
+        if (this.enemy.army <= 0 || this.enemy.hp <= 0) {
+            this.phase = 'victory';
+            this.log.push('🎉 ПОБЕДА! Враг разбит!');
+            this.stop();
+            return;
         }
-    },
-    // Замок
-    castle: {
-        name: 'Утёс Кастерли',
-        walls: { hp: 1000, maxHp: 1000, destroyed: false },
-        towers: [
-            { name: 'Северная башня', hp: 300, maxHp: 300, destroyed: false },
-            { name: 'Южная башня', hp: 300, maxHp: 300, destroyed: false },
-            { name: 'Западная башня', hp: 300, maxHp: 300, destroyed: false }
-        ],
-        gate: { hp: 500, maxHp: 500, destroyed: false },
-        garrison: 200,   // защитников
-        maxGarrison: 200,
-        morale: 100     // мораль защитников
-    },
-    // Осадные орудия
-    siegeWeapons: {
-        trebuchet: { count: 3, building: false, buildTime: 0, damage: 50, range: 300, accuracy: 60 },
-        catapult: { count: 2, building: false, buildTime: 0, damage: 30, range: 200, accuracy: 70 },
-        batteringRam: { count: 1, building: false, buildTime: 0, damage: 20, range: 50, accuracy: 90 },
-        siegeTower: { count: 0, building: false, buildTime: 0, damage: 0, range: 0, accuracy: 0 }
-    },
-    // Состояние осады
-    phase: 'siege', // 'siege' | 'storm' | 'assault' | 'victory' | 'defeat'
-    log: [],
-    turn: 'player'
+        if (this.player.army <= 0 || this.player.hp <= 0) {
+            this.phase = 'defeat';
+            this.log.push('💀 ПОРАЖЕНИЕ... Ваша армия уничтожена.');
+            this.stop();
+            return;
+        }
+
+        // Ход игрока
+        if (this.turn === 'player') {
+            this.log.push(`⏳ Ваш ход. Выберите стратегию: ${this.strategy}`);
+            // Ждём выбора игрока (через интерфейс)
+        } else {
+            // Ход врага (ИИ)
+            this.enemyTurn();
+        }
+    }
+
+    // ============================================================
+    // ВЫБОР СТРАТЕГИИ (игрок)
+    // ============================================================
+    setStrategy(strategy) {
+        if (this.turn !== 'player') return;
+        this.strategy = strategy;
+        this.log.push(`📯 Стратегия выбрана: ${strategy}`);
+        this.playerTurn();
+    }
+
+    // ============================================================
+    // ХОД ИГРОКА
+    // ============================================================
+    playerTurn() {
+        const p = this.player;
+        const e = this.enemy;
+        let damage = 0;
+        let message = '';
+
+        // Расчёт урона в зависимости от стратегии
+        switch (this.strategy) {
+            case 'attack':
+                damage = (p.damage + p.army * 0.2) * (0.8 + Math.random() * 0.4);
+                e.army -= damage;
+                message = `⚔️ Атака! Нанесено ${Math.round(damage)} урона.`;
+                break;
+            case 'defend':
+                const heal = p.army * 0.05 + 10;
+                p.army += heal;
+                message = `🛡️ Защита! Восстановлено ${Math.round(heal)} солдат.`;
+                break;
+            case 'flank':
+                damage = (p.damage + p.agility * 0.5) * (0.6 + Math.random() * 0.6);
+                e.army -= damage;
+                e.morale -= 5;
+                message = `🏹 Фланговая атака! Нанесено ${Math.round(damage)} урона. Мораль врага -5.`;
+                break;
+            case 'siege':
+                damage = (p.damage * 1.5) * (0.5 + Math.random() * 0.5);
+                e.hp -= damage;
+                message = `🔥 Осадные орудия! Нанесено ${Math.round(damage)} урона стенам.`;
+                break;
+            default:
+                damage = p.damage * 0.5;
+                e.army -= damage;
+                message = `⚔️ Атака! Нанесено ${Math.round(damage)} урона.`;
+        }
+
+        // Ответ врага
+        const enemyResponse = this.enemyResponse();
+        message += '\n' + enemyResponse;
+
+        this.log.push(message);
+        this.turn = 'enemy';
+
+        // Таймер на ход врага
+        this.timer = setTimeout(() => {
+            this.nextTurn();
+        }, this.turnTime);
+    }
+
+    // ============================================================
+    // ХОД ВРАГА (ИИ)
+    // ============================================================
+    enemyTurn() {
+        const p = this.player;
+        const e = this.enemy;
+
+        // ИИ выбирает стратегию в зависимости от состояния
+        let enemyStrategy = 'attack';
+        if (e.morale < 30) enemyStrategy = 'defend';
+        else if (p.army < e.army * 0.5) enemyStrategy = 'attack';
+        else if (Math.random() < 0.3) enemyStrategy = 'flank';
+
+        let damage = 0;
+        let message = '';
+
+        switch (enemyStrategy) {
+            case 'attack':
+                damage = (e.damage + e.army * 0.15) * (0.7 + Math.random() * 0.5);
+                p.army -= damage;
+                message = `🐺 Враг атакует! Потеряно ${Math.round(damage)} солдат.`;
+                break;
+            case 'defend':
+                const heal = e.army * 0.03 + 5;
+                e.army += heal;
+                message = `🛡️ Враг защищается! Восстановил ${Math.round(heal)} солдат.`;
+                break;
+            case 'flank':
+                damage = (e.damage + e.agility * 0.3) * (0.5 + Math.random() * 0.6);
+                p.army -= damage;
+                message = `🏹 Враг обходит фланг! Потеряно ${Math.round(damage)} солдат.`;
+                break;
+        }
+
+        this.log.push(message);
+        this.turn = 'player';
+
+        // Таймер на ход игрока
+        this.timer = setTimeout(() => {
+            this.nextTurn();
+        }, this.turnTime);
+    }
+
+    // ============================================================
+    // ОТВЕТ ВРАГА НА ДЕЙСТВИЯ ИГРОКА
+    // ============================================================
+    enemyResponse() {
+        const p = this.player;
+        const e = this.enemy;
+        let damage = 0;
+        let message = '';
+
+        // Враг отвечает на атаку
+        if (this.strategy === 'attack' || this.strategy === 'flank') {
+            damage = (e.damage * 0.5 + e.army * 0.05) * (0.5 + Math.random() * 0.5);
+            p.army -= damage;
+            message = `🏹 Враг отвечает! Потеряно ${Math.round(damage)} солдат.`;
+        } else if (this.strategy === 'siege') {
+            // Если игрок использует осадные орудия, враг пытается их уничтожить
+            const siegeDamage = e.army * 0.02 + 5;
+            p.army -= siegeDamage;
+            message = `🔥 Враг атакует осадные орудия! Потеряно ${Math.round(siegeDamage)} солдат.`;
+        } else {
+            damage = e.damage * 0.2;
+            p.army -= damage;
+            message = `💢 Враг контратакует! Потеряно ${Math.round(damage)} солдат.`;
+        }
+
+        // Снижение морали врага
+        e.morale = Math.max(0, e.morale - 0.5);
+
+        return message;
+    }
+
+    // ============================================================
+    // ОСТАНОВКА БОЯ
+    // ============================================================
+    stop() {
+        if (this.timer) {
+            clearTimeout(this.timer);
+            this.timer = null;
+        }
+        this.phase = this.phase === 'active' ? 'stop' : this.phase;
+    }
+
+    // ============================================================
+    // ПОЛУЧИТЬ ЛОГ
+    // ============================================================
+    getLog() {
+        return this.log.slice(-10);
+    }
+
+    // ============================================================
+    // ПОЛУЧИТЬ СТАТУС
+    // ============================================================
+    getStatus() {
+        return {
+            player: {
+                hp: Math.round(this.player.hp),
+                army: Math.round(this.player.army),
+                maxArmy: this.player.maxArmy || 100
+            },
+            enemy: {
+                hp: Math.round(this.enemy.hp),
+                army: Math.round(this.enemy.army),
+                morale: Math.round(this.enemy.morale)
+            },
+            phase: this.phase,
+            turn: this.turn,
+            strategy: this.strategy,
+            log: this.getLog()
+        };
+    }
+}
+
+// ============================================================
+// СОЗДАНИЕ БОЯ (ИСПОЛЬЗОВАНИЕ)
+// ============================================================
+function createBattle(playerStats, enemyStats) {
+    const battle = new Battle(playerStats, enemyStats);
+    return battle.start();
+}
+
+// ============================================================
+// ПРИМЕР ИСПОЛЬЗОВАНИЯ (для теста)
+// ============================================================
+/*
+const player = {
+    hp: 100,
+    maxHp: 100,
+    damage: 20,
+    defense: 10,
+    agility: 15,
+    army: 100,
+    maxArmy: 100
 };
 
-// ============================================================
-// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
-// ============================================================
-function setMessage(msg) {
-    const el = document.getElementById('game-message');
-    el.textContent = msg || '';
-    clearTimeout(el._timer);
-    if (msg && msg.length > 0) {
-        el._timer = setTimeout(() => { el.textContent = ''; }, 5000);
-    }
-}
+const enemy = {
+    hp: 80,
+    maxHp: 80,
+    damage: 15,
+    defense: 8,
+    agility: 10,
+    army: 80,
+    morale: 100
+};
 
-function addLog(msg) {
-    siege.log.push(msg);
-    if (siege.log.length > 50) siege.log.shift();
-}
-
-function updateUI() {
-    const p = siege.player;
-    const c = siege.castle;
-    
-    document.getElementById('p-name').textContent = p.name;
-    document.getElementById('p-level').textContent = p.level;
-    document.getElementById('p-hp').textContent = Math.round(p.hp);
-    document.getElementById('p-maxhp').textContent = p.maxHp;
-    document.getElementById('p-damage').textContent = p.damage + (p.equipment.weapon?.damage || 0);
-    document.getElementById('p-defense').textContent = p.defense + (p.equipment.armor?.defense || 0) + (p.equipment.shield?.defense || 0);
-    document.getElementById('p-army').textContent = Math.round(p.army);
-    
-    const hpPercent = Math.max(0, (p.hp / p.maxHp) * 100);
-    const fill = document.getElementById('hp-fill');
-    fill.style.width = hpPercent + '%';
-    fill.className = 'hp-fill' + (hpPercent < 30 ? ' danger' : '');
-    
-    document.getElementById('castle-name').textContent = c.name;
-    
-    updateStory();
-    updateActions();
-}
-
-function updateStory() {
-    const c = siege.castle;
-    const p = siege.player;
-    const wallsPercent = Math.round((c.walls.hp / c.walls.maxHp) * 100);
-    const gatePercent = Math.round((c.gate.hp / c.gate.maxHp) * 100);
-    const towersAlive = c.towers.filter(t => !t.destroyed).length;
-    const garrisonPercent = Math.round((c.garrison / c.maxGarrison) * 100);
-    
-    let text = `🏰 ${c.name}\n`;
-    text += `🧱 Стены: ${wallsPercent}% (${Math.round(c.walls.hp)}/${c.walls.maxHp})\n`;
-    text += `🏗️ Башни: ${towersAlive}/${c.towers.length} целы\n`;
-    text += `🚪 Ворота: ${c.gate.destroyed ? 'РАЗРУШЕНЫ' : gatePercent + '%'}\n`;
-    text += `👥 Защитники: ${Math.round(c.garrison)} (мораль: ${c.morale}%)\n\n`;
-    
-    text += `⚔️ Твоя армия: ${Math.round(p.army)} солдат\n`;
-    text += `🛠️ Орудия: ${siege.siegeWeapons.trebuchet.count} требушетов, ${siege.siegeWeapons.catapult.count} катапульт, ${siege.siegeWeapons.batteringRam.count} таранов\n`;
-    
-    if (siege.phase === 'victory') {
-        text += '\n🎉 ПОБЕДА! Замок захвачен!';
-    } else if (siege.phase === 'defeat') {
-        text += '\n💀 ВАША АРМИЯ РАЗБИТА...';
-    } else if (siege.phase === 'storm') {
-        text += '\n⚔️ ШТУРМ! Ваши войска идут на стены!';
-    }
-    
-    document.getElementById('story-text').textContent = text;
-}
-
-function updateActions() {
-    const container = document.getElementById('actions-container');
-    container.innerHTML = '';
-    
-    const p = siege.player;
-    const c = siege.castle;
-    
-    let actions = [];
-    
-    if (siege.phase === 'victory' || siege.phase === 'defeat') {
-        actions.push({ id: 'reset', label: '🔄 Начать заново' });
-    } else if (siege.phase === 'storm') {
-        actions.push({ id: 'storm_attack', label: '⚔️ Атаковать стены' });
-        actions.push({ id: 'storm_fallback', label: '🏃 Отступить к лагерю' });
-    } else {
-        // Осада
-        if (p.army > 0) {
-            actions.push({ id: 'build_trebuchet', label: '🛠️ Построить требушет (требует 10 солдат)' });
-            actions.push({ id: 'build_catapult', label: '🛠️ Построить катапульту (требует 5 солдат)' });
-            actions.push({ id: 'build_battering_ram', label: '🛠️ Построить таран (требует 5 солдат)' });
-            actions.push({ id: 'build_siege_tower', label: '🛠️ Построить осадную башню (требует 15 солдат)' });
-        }
-        
-        if (siege.siegeWeapons.trebuchet.count > 0) {
-            actions.push({ id: 'fire_trebuchet', label: '💥 Огонь из требушетов (по стенам)' });
-        }
-        if (siege.siegeWeapons.catapult.count > 0) {
-            actions.push({ id: 'fire_catapult', label: '💥 Огонь из катапульт (по башням)' });
-        }
-        if (siege.siegeWeapons.batteringRam.count > 0 && c.gate.hp > 0) {
-            actions.push({ id: 'ram_gate', label: '🔨 Таран по воротам' });
-        }
-        if (siege.siegeWeapons.siegeTower.count > 0) {
-            actions.push({ id: 'assault_with_tower', label: '🏰 Штурм с башней' });
-        }
-        
-        if (c.walls.hp < c.walls.maxHp * 0.5 || c.gate.destroyed) {
-            actions.push({ id: 'start_storm', label: '⚔️ НАЧАТЬ ШТУРМ!' });
-        }
-    }
-    
-    if (DEBUG) {
-        actions.push({ id: 'debug_heal', label: '💉 +500 HP (debug)' });
-        actions.push({ id: 'debug_army', label: '👥 +100 солдат (debug)' });
-        actions.push({ id: 'debug_damage_walls', label: '💥 Снести стены (debug)' });
-    }
-    
-    actions.forEach(a => {
-        const btn = document.createElement('button');
-        btn.className = 'btn-game';
-        btn.textContent = a.label;
-        btn.onclick = function() { doAction(a.id); };
-        container.appendChild(btn);
-    });
-}
-
-// ============================================================
-// ДЕЙСТВИЯ
-// ============================================================
-function doAction(action) {
-    const p = siege.player;
-    const c = siege.castle;
-    const sw = siege.siegeWeapons;
-    
-    switch(action) {
-        case 'reset':
-            resetSiege();
-            break;
-            
-        case 'build_trebuchet':
-            if (p.army < 10) { setMessage('❌ Недостаточно солдат для строительства (нужно 10)'); return; }
-            p.army -= 10;
-            sw.trebuchet.count += 1;
-            setMessage('✅ Построен требушет! +1');
-            addLog('Построен требушет');
-            updateUI();
-            break;
-            
-        case 'build_catapult':
-            if (p.army < 5) { setMessage('❌ Недостаточно солдат (нужно 5)'); return; }
-            p.army -= 5;
-            sw.catapult.count += 1;
-            setMessage('✅ Построена катапульта! +1');
-            addLog('Построена катапульта');
-            updateUI();
-            break;
-            
-        case 'build_battering_ram':
-            if (p.army < 5) { setMessage('❌ Недостаточно солдат (нужно 5)'); return; }
-            p.army -= 5;
-            sw.batteringRam.count += 1;
-            setMessage('✅ Построен таран! +1');
-            addLog('Построен таран');
-            updateUI();
-            break;
-            
-        case 'build_siege_tower':
-            if (p.army < 15) { setMessage('❌ Недостаточно солдат (нужно 15)'); return; }
-            p.army -= 15;
-            sw.siegeTower.count += 1;
-            setMessage('✅ Построена осадная башня! +1');
-            addLog('Построена осадная башня');
-            updateUI();
-            break;
-            
-        case 'fire_trebuchet':
-            fireSiegeWeapon('trebuchet');
-            break;
-            
-        case 'fire_catapult':
-            fireSiegeWeapon('catapult');
-            break;
-            
-        case 'ram_gate':
-            if (sw.batteringRam.count <= 0) { setMessage('❌ Нет таранов'); return; }
-            if (c.gate.destroyed) { setMessage('❌ Ворота уже разрушены'); return; }
-            const ramDamage = 30 + Math.random() * 20;
-            c.gate.hp -= ramDamage;
-            if (c.gate.hp <= 0) { c.gate.hp = 0; c.gate.destroyed = true; setMessage('🚪 ВОРОТА РАЗРУШЕНЫ!'); addLog('Ворота разрушены тараном'); }
-            else { setMessage(`🔨 Таран нанёс ${Math.round(ramDamage)} урона воротам (осталось: ${Math.round(c.gate.hp)})`); }
-            updateUI();
-            break;
-            
-        case 'assault_with_tower':
-            if (sw.siegeTower.count <= 0) { setMessage('❌ Нет осадных башен'); return; }
-            if (c.walls.destroyed) {
-                setMessage('⚔️ Стены уже разрушены! Переходите к штурму напрямую.');
-                return;
-            }
-            // Башня подходит к стене
-            setMessage('🏰 Осадная башня подходит к стене! Защитники стреляют...');
-            const towerDestroyChance = 30 + (c.towers.filter(t => !t.destroyed).length * 10);
-            if (Math.random() * 100 < towerDestroyChance) {
-                sw.siegeTower.count -= 1;
-                setMessage('💥 Осадная башня разрушена защитниками!');
-                addLog('Осадная башня уничтожена');
-                updateUI();
-                return;
-            }
-            // Башня дошла
-            setMessage('🏰 Осадная башня достигла стены! Ваши солдаты ворвались на стены!');
-            addLog('Осадная башня достигла стены');
-            siege.phase = 'storm';
-            updateUI();
-            break;
-            
-        case 'start_storm':
-            if (c.walls.hp > c.walls.maxHp * 0.5 && !c.gate.destroyed) {
-                setMessage('❌ Стены слишком прочны. Разрушьте их или ворота.');
-                return;
-            }
-            siege.phase = 'storm';
-            setMessage('⚔️ ШТУРМ! Ваши войска идут на стены!');
-            addLog('Начат штурм');
-            updateUI();
-            break;
-            
-        case 'storm_attack':
-            stormAttack();
-            break;
-            
-        case 'storm_fallback':
-            siege.phase = 'siege';
-            setMessage('🏃 Вы отступили к лагерю.');
-            addLog('Отступление');
-            updateUI();
-            break;
-            
-        case 'debug_heal':
-            p.hp = p.maxHp;
-            setMessage('💉 HP восстановлен до максимума');
-            updateUI();
-            break;
-            
-        case 'debug_army':
-            p.army += 100;
-            setMessage('👥 +100 солдат');
-            updateUI();
-            break;
-            
-        case 'debug_damage_walls':
-            c.walls.hp = 100;
-            if (c.walls.hp <= 0) c.walls.destroyed = true;
-            c.gate.hp = 50;
-            if (c.gate.hp <= 0) c.gate.destroyed = true;
-            setMessage('💥 Стены и ворота почти разрушены (debug)');
-            updateUI();
-            break;
-    }
-}
-
-// ============================================================
-// ОГОНЬ ОСАДНЫХ ОРУДИЙ
-// ============================================================
-function fireSiegeWeapon(type) {
-    const sw = siege.siegeWeapons;
-    const c = siege.castle;
-    const count = sw[type].count;
-    if (count <= 0) { setMessage(`❌ Нет ${type === 'trebuchet' ? 'требушетов' : 'катапульт'}`); return; }
-    
-    const weapon = sw[type];
-    const damage = (weapon.damage + Math.random() * 20) * count;
-    const accuracy = weapon.accuracy + Math.random() * 20;
-    
-    let target = 'стены';
-    let targetHp = c.walls.hp;
-    
-    // Если есть башни, может попасть в них
-    const aliveTowers = c.towers.filter(t => !t.destroyed);
-    if (aliveTowers.length > 0 && Math.random() < 0.3) {
-        const tower = aliveTowers[Math.floor(Math.random() * aliveTowers.length)];
-        const towerDamage = damage * 0.7;
-        tower.hp -= towerDamage;
-        if (tower.hp <= 0) {
-            tower.hp = 0;
-            tower.destroyed = true;
-            setMessage(`💥 ${tower.name} РАЗРУШЕНА!`);
-            addLog(`${tower.name} разрушена`);
-        } else {
-            setMessage(`💥 Попадание в ${tower.name}! -${Math.round(towerDamage)} HP`);
-        }
-        updateUI();
-        return;
-    }
-    
-    // Иначе бьём по стенам
-    const wallDamage = damage * (accuracy / 100);
-    c.walls.hp -= wallDamage;
-    if (c.walls.hp <= 0) {
-        c.walls.hp = 0;
-        c.walls.destroyed = true;
-        setMessage('💥 СТЕНЫ РАЗРУШЕНЫ! Путь в замок открыт!');
-        addLog('Стены разрушены');
-    } else {
-        setMessage(`💥 Попадание по стенам! -${Math.round(wallDamage)} HP (осталось: ${Math.round(c.walls.hp)})`);
-    }
-    
-    // Защитники отвечают
-    defenderResponse();
-    updateUI();
-}
-
-// ============================================================
-// ЗАЩИТНИКИ ОТВЕЧАЮТ
-// ============================================================
-function defenderResponse() {
-    const c = siege.castle;
-    const p = siege.player;
-    
-    // Защитники стреляют в ответ
-    const defenderDamage = (c.garrison / 100) * (10 + Math.random() * 15);
-    const actualDamage = Math.min(defenderDamage * 0.3, 20); // защитники слабее
-    
-    if (p.army > 0) {
-        const lost = Math.min(p.army, Math.round(actualDamage + Math.random() * 5));
-        p.army -= lost;
-        setMessage(`🏹 Защитники ответили! Вы потеряли ${lost} солдат.`);
-        addLog(`Потеряно ${lost} солдат от ответного огня`);
-    }
-    
-    // Мораль защитников падает
-    c.morale = Math.max(0, c.morale - 0.5);
-    
-    if (p.army <= 0) {
-        siege.phase = 'defeat';
-        setMessage('💀 ВСЯ ВАША АРМИЯ УНИЧТОЖЕНА... Осада провалена.');
-        addLog('Поражение в осаде');
-    }
-}
-
-// ============================================================
-// ШТУРМ
-// ============================================================
-function stormAttack() {
-    const p = siege.player;
-    const c = siege.castle;
-    
-    if (p.army <= 0) {
-        siege.phase = 'defeat';
-        setMessage('💀 У вас нет солдат для штурма!');
-        addLog('Поражение');
-        updateUI();
-        return;
-    }
-    
-    // Расчёт боя
-    let attackerPower = p.army * (1 + p.damage / 100);
-    let defenderPower = c.garrison * (1 + (100 - c.morale) / 100);
-    
-    // Бонусы за разрушенные стены
-    if (c.walls.destroyed) defenderPower *= 0.6;
-    if (c.gate.destroyed) defenderPower *= 0.8;
-    
-    // Бонусы за башни
-    const aliveTowers = c.towers.filter(t => !t.destroyed).length;
-    defenderPower *= (1 + aliveTowers * 0.2);
-    
-    // Бой
-    const attackerRoll = attackerPower * (0.7 + Math.random() * 0.6);
-    const defenderRoll = defenderPower * (0.6 + Math.random() * 0.8);
-    
-    if (attackerRoll > defenderRoll) {
-        // Победа
-        const remaining = Math.round(p.army * (0.5 + Math.random() * 0.3));
-        p.army = Math.max(1, remaining);
-        c.garrison = 0;
-        siege.phase = 'victory';
-        setMessage('🎉 ПОБЕДА! Замок захвачен!');
-        addLog('Победа! Замок захвачен');
-    } else {
-        // Поражение
-        const lost = Math.round(p.army * (0.4 + Math.random() * 0.4));
-        p.army = Math.max(0, p.army - lost);
-        const defenderLost = Math.round(c.garrison * (0.2 + Math.random() * 0.3));
-        c.garrison = Math.max(0, c.garrison - defenderLost);
-        
-        if (p.army <= 0) {
-            siege.phase = 'defeat';
-            setMessage('💀 ВАША АРМИЯ РАЗБИТА!');
-            addLog('Поражение');
-        } else {
-            setMessage(`⚔️ Штурм отбит! Потеряно ${lost} солдат. Защитники потеряли ${defenderLost}.`);
-            addLog(`Штурм отбит, потеряно ${lost} солдат`);
-        }
-    }
-    
-    updateUI();
-}
-
-// ============================================================
-// СБРОС
-// ============================================================
-function resetSiege() {
-    siege.player.army = siege.player.maxArmy;
-    siege.player.hp = siege.player.maxHp;
-    
-    siege.castle.walls.hp = siege.castle.walls.maxHp;
-    siege.castle.walls.destroyed = false;
-    siege.castle.gate.hp = siege.castle.gate.maxHp;
-    siege.castle.gate.destroyed = false;
-    siege.castle.garrison = siege.castle.maxGarrison;
-    siege.castle.morale = 100;
-    siege.castle.towers.forEach(t => { t.hp = t.maxHp; t.destroyed = false; });
-    
-    siege.siegeWeapons.trebuchet.count = 3;
-    siege.siegeWeapons.catapult.count = 2;
-    siege.siegeWeapons.batteringRam.count = 1;
-    siege.siegeWeapons.siegeTower.count = 0;
-    
-    siege.phase = 'siege';
-    siege.log = [];
-    
-    setMessage('🔄 Осада началась заново!');
-    addLog('Осада перезапущена');
-    updateUI();
-}
-
-// ============================================================
-// МОДАЛЬНОЕ ОКНО
-// ============================================================
-function openModal(title, content) {
-    document.getElementById('modal-title').textContent = title;
-    document.getElementById('modal-content').innerHTML = content;
-    document.getElementById('modal').classList.remove('hide');
-}
-
-function closeModal() {
-    document.getElementById('modal').classList.add('hide');
-}
-
-// ============================================================
-// ДЕБАГ
-// ============================================================
-function toggleDebug() {
-    const status = DEBUG ? 'ВКЛЮЧЁН' : 'ВЫКЛЮЧЕН';
-    setMessage(`🐞 Режим Бога: ${status}`);
-}
-
-// ============================================================
-// ЗАПУСК
-// ============================================================
-function init() {
-    resetSiege();
-    // Первое сообщение
-    setMessage('⚔️ Добро пожаловать на осаду Утёса Кастерли!');
-    addLog('Осада начата');
-    updateUI();
-}
-
-init();
-</script>
-</body>
-</html>
+const battle = createBattle(player, enemy);
+// ... и далее через интерфейс вызываем battle.setStrategy('attack') и т.д.
+*/
