@@ -1,31 +1,137 @@
-// ============================================================
-// BATTLE.JS — НОВАЯ БОЕВАЯ СИСТЕМА
-// ============================================================
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>⚔️ ЖИВОЙ БОЙ | Тест</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { background:#0d0a08; font-family:'Georgia',serif; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:10px; }
+        #app { max-width:500px; width:100%; background:#1f1712; border:1px solid #3d3026; border-radius:20px; padding:16px 14px; box-shadow:0 20px 50px rgba(0,0,0,0.9); }
+        .header { text-align:center; border-bottom:1px solid #3d3026; padding-bottom:10px; margin-bottom:12px; }
+        .header h1 { color:#c9b694; font-size:20px; font-weight:400; letter-spacing:4px; }
+        .header h2 { color:#6a5a48; font-size:11px; font-weight:400; letter-spacing:6px; }
+        .btn { width:100%; padding:12px 14px; border:1px solid #3d3026; border-radius:10px; font-family:'Georgia',serif; font-size:14px; cursor:pointer; text-align:center; margin-top:6px; background:#2a201a; color:#c9b694; transition:0.2s; }
+        .btn:active { background:#3d3026; transform:scale(0.98); }
+        .btn-primary { background:#3d2e20; color:#c9b694; }
+        .btn-danger { background:#2a1a12; color:#c96a5a; border-color:#4a2a20; }
+        .btn-success { background:#122a1a; color:#7ac98a; border-color:#2a4a2a; }
+        .btn-small { display:inline-block; width:auto; padding:4px 12px; margin:4px; font-size:12px; }
+        .btn:disabled { opacity:0.4; pointer-events:none; }
+        .row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:13px; color:#b8a890; border-bottom:1px solid #1a1410; gap:8px; }
+        .row .label { color:#7a6a58; flex:1; }
+        .row .value { color:#c9b694; text-align:right; white-space:nowrap; }
+        .story-box { background:#120e0b; border:1px solid #2a201a; border-radius:12px; padding:14px; margin-bottom:12px; min-height:100px; }
+        .story-box h4 { color:#6a5a48; font-size:15px; font-weight:400; margin-bottom:6px; }
+        .story-box p { color:#b8a890; font-size:13px; line-height:1.7; white-space:pre-line; }
+        .game-msg { color:#6a5a48; font-style:italic; margin-top:10px; padding-top:8px; border-top:1px solid #1f1712; font-size:13px; min-height:20px; }
+        .action-group { margin-top:10px; padding-top:10px; border-top:1px solid #1f1712; }
+        .action-group p { color:#6a5a48; font-size:13px; margin-bottom:6px; letter-spacing:1px; }
+        .btn-game { background:#2a201a; border:1px solid #3d3026; color:#c9b694; padding:11px 14px; border-radius:10px; font-size:14px; cursor:pointer; width:100%; text-align:left; margin-top:5px; }
+        .btn-game:active { background:#3d3026; }
+        .btn-game:disabled { opacity:0.4; pointer-events:none; }
+        .hp-bar { height:12px; background:#1a1410; border-radius:6px; overflow:hidden; margin:4px 0; }
+        .hp-fill { height:100%; background:#7ac98a; transition:width 0.5s; border-radius:6px; }
+        .hp-fill.danger { background:#c96a5a; }
+        .hp-fill.warning { background:#ffd700; }
+        .menu-bar { background:#120e0b; border:1px solid #2a201a; border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:13px; line-height:1.5; color:#b8a890; }
+        .menu-stats { display:flex; justify-content:space-between; flex-wrap:wrap; padding:2px 0; }
+        .log-box { background:#120e0b; border:1px solid #2a201a; border-radius:12px; padding:10px; max-height:150px; overflow-y:auto; font-size:12px; color:#6a5a48; }
+        .log-box .log-entry { padding:2px 0; border-bottom:1px solid #1a1410; }
+        .log-box .log-entry:last-child { border-bottom:none; }
+        .status-badge { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; }
+        .badge-victory { background:#122a1a; color:#7ac98a; border:1px solid #2a4a2a; }
+        .badge-defeat { background:#2a1a12; color:#c96a5a; border:1px solid #4a2a20; }
+        .badge-active { background:#1a1a2a; color:#ffd700; border:1px solid #3d3d6a; }
+        .footer { text-align:center; color:#2a201a; font-size:10px; margin-top:14px; padding-top:10px; border-top:1px solid #1f1712; letter-spacing:3px; }
+        .flex-row { display:flex; gap:6px; flex-wrap:wrap; margin-top:4px; }
+        .flex-row .btn-small { flex:1; min-width:70px; }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="header"><h1>⚔️ ЖИВОЙ БОЙ</h1><h2>ТАКТИЧЕСКИЙ ТЕСТ</h2></div>
 
+    <div id="game">
+        <div class="menu-bar">
+            <div class="menu-stats">
+                <div>👤 <span id="p-name">Твой Лорд</span></div>
+                <div>❤️ <span id="p-hp">100</span>/<span id="p-maxhp">100</span></div>
+                <div>👥 <span id="p-army">100</span></div>
+            </div>
+            <div class="hp-bar"><div class="hp-fill" id="hp-fill" style="width:100%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#6a5a48;margin-top:4px;">
+                <span>⚔️ Урон: <span id="p-damage">20</span></span>
+                <span>🛡️ Защита: <span id="p-defense">10</span></span>
+                <span>💨 Ловкость: <span id="p-agility">15</span></span>
+            </div>
+        </div>
+
+        <div class="menu-bar" style="margin-bottom:8px;">
+            <div class="menu-stats">
+                <div>🐺 <span id="e-name">Враг</span></div>
+                <div>❤️ <span id="e-hp">80</span>/<span id="e-maxhp">80</span></div>
+                <div>👥 <span id="e-army">80</span></div>
+                <div>💪 Мораль: <span id="e-morale">100</span>%</div>
+            </div>
+            <div class="hp-bar"><div class="hp-fill danger" id="e-hp-fill" style="width:100%"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:#6a5a48;margin-top:4px;">
+                <span>⚔️ Урон: <span id="e-damage">15</span></span>
+                <span>🛡️ Защита: <span id="e-defense">8</span></span>
+            </div>
+        </div>
+
+        <div id="status-badge" class="status-badge badge-active" style="margin-bottom:8px;">⚔️ Бой идёт</div>
+
+        <div class="story-box">
+            <h4 id="story-title">⚔️ ПОЛЕ БОЯ</h4>
+            <p id="story-text">Выберите стратегию и начинайте бой.</p>
+            <div id="game-message" class="game-msg"></div>
+        </div>
+
+        <div id="actions-container"></div>
+
+        <div class="log-box" id="log-box">
+            <div class="log-entry" style="color:#6a5a48;">📜 Лог боя...</div>
+        </div>
+
+        <div class="flex-row">
+            <button class="btn btn-danger btn-small" onclick="resetBattle()">🔄 Новый бой</button>
+            <button class="btn btn-small" onclick="toggleAuto()">⏸️ Авто-ход</button>
+        </div>
+    </div>
+
+    <div class="footer">❄️ ЗИМА БЛИЗКО</div>
+</div>
+
+<script>
+// ============================================================
+// BATTLE CLASS — ПОЛНАЯ ЛОГИКА
+// ============================================================
 class Battle {
     constructor(player, enemy) {
-        this.player = player;       // { hp, maxHp, damage, defense, agility, army }
-        this.enemy = enemy;         // { hp, maxHp, damage, defense, agility, army, morale }
+        this.player = { ...player };
+        this.enemy = { ...enemy };
         this.turn = 'player';
-        this.phase = 'active';      // 'active' | 'victory' | 'defeat'
+        this.phase = 'active';
         this.log = [];
         this.timer = null;
-        this.strategy = 'attack';   // 'attack' | 'defend' | 'flank' | 'siege'
-        this.turnTime = 10000;      // 10 секунд на ход
+        this.strategy = 'attack';
+        this.turnTime = 8000;
+        this.autoMode = false;
+        this.stats = {
+            playerArmyLost: 0,
+            enemyArmyLost: 0
+        };
     }
 
-    // ============================================================
-    // СТАРТ БОЯ
-    // ============================================================
     start() {
         this.log.push('⚔️ Бой начался!');
+        this.updateUI();
         this.nextTurn();
         return this;
     }
 
-    // ============================================================
-    // ХОД
-    // ============================================================
     nextTurn() {
         if (this.phase !== 'active') return;
 
@@ -34,45 +140,44 @@ class Battle {
             this.phase = 'victory';
             this.log.push('🎉 ПОБЕДА! Враг разбит!');
             this.stop();
+            this.updateUI();
             return;
         }
         if (this.player.army <= 0 || this.player.hp <= 0) {
             this.phase = 'defeat';
             this.log.push('💀 ПОРАЖЕНИЕ... Ваша армия уничтожена.');
             this.stop();
+            this.updateUI();
             return;
         }
 
-        // Ход игрока
         if (this.turn === 'player') {
-            this.log.push(`⏳ Ваш ход. Выберите стратегию: ${this.strategy}`);
-            // Ждём выбора игрока (через интерфейс)
+            if (this.autoMode) {
+                // Автоматический выбор стратегии
+                const strategies = ['attack', 'defend', 'flank', 'siege'];
+                this.strategy = strategies[Math.floor(Math.random() * strategies.length)];
+                this.playerTurn();
+            } else {
+                // Ждём выбора игрока
+                this.updateUI();
+            }
         } else {
-            // Ход врага (ИИ)
             this.enemyTurn();
         }
     }
 
-    // ============================================================
-    // ВЫБОР СТРАТЕГИИ (игрок)
-    // ============================================================
     setStrategy(strategy) {
-        if (this.turn !== 'player') return;
+        if (this.turn !== 'player' || this.phase !== 'active') return;
         this.strategy = strategy;
-        this.log.push(`📯 Стратегия выбрана: ${strategy}`);
         this.playerTurn();
     }
 
-    // ============================================================
-    // ХОД ИГРОКА
-    // ============================================================
     playerTurn() {
         const p = this.player;
         const e = this.enemy;
         let damage = 0;
         let message = '';
 
-        // Расчёт урона в зависимости от стратегии
         switch (this.strategy) {
             case 'attack':
                 damage = (p.damage + p.army * 0.2) * (0.8 + Math.random() * 0.4);
@@ -80,14 +185,14 @@ class Battle {
                 message = `⚔️ Атака! Нанесено ${Math.round(damage)} урона.`;
                 break;
             case 'defend':
-                const heal = p.army * 0.05 + 10;
+                const heal = p.army * 0.05 + 5;
                 p.army += heal;
                 message = `🛡️ Защита! Восстановлено ${Math.round(heal)} солдат.`;
                 break;
             case 'flank':
                 damage = (p.damage + p.agility * 0.5) * (0.6 + Math.random() * 0.6);
                 e.army -= damage;
-                e.morale -= 5;
+                e.morale = Math.max(0, e.morale - 5);
                 message = `🏹 Фланговая атака! Нанесено ${Math.round(damage)} урона. Мораль врага -5.`;
                 break;
             case 'siege':
@@ -96,41 +201,35 @@ class Battle {
                 message = `🔥 Осадные орудия! Нанесено ${Math.round(damage)} урона стенам.`;
                 break;
             default:
-                damage = p.damage * 0.5;
+                damage = p.damage * 0.5 + p.army * 0.1;
                 e.army -= damage;
                 message = `⚔️ Атака! Нанесено ${Math.round(damage)} урона.`;
         }
 
         // Ответ врага
-        const enemyResponse = this.enemyResponse();
-        message += '\n' + enemyResponse;
-
-        this.log.push(message);
+        const response = this.enemyResponse();
+        this.log.push(message + ' ' + response);
         this.turn = 'enemy';
+        this.updateUI();
 
-        // Таймер на ход врага
         this.timer = setTimeout(() => {
             this.nextTurn();
         }, this.turnTime);
     }
 
-    // ============================================================
-    // ХОД ВРАГА (ИИ)
-    // ============================================================
     enemyTurn() {
         const p = this.player;
         const e = this.enemy;
 
-        // ИИ выбирает стратегию в зависимости от состояния
-        let enemyStrategy = 'attack';
-        if (e.morale < 30) enemyStrategy = 'defend';
-        else if (p.army < e.army * 0.5) enemyStrategy = 'attack';
-        else if (Math.random() < 0.3) enemyStrategy = 'flank';
+        let strategy = 'attack';
+        if (e.morale < 30) strategy = 'defend';
+        else if (p.army < e.army * 0.5) strategy = 'attack';
+        else if (Math.random() < 0.3) strategy = 'flank';
 
         let damage = 0;
         let message = '';
 
-        switch (enemyStrategy) {
+        switch (strategy) {
             case 'attack':
                 damage = (e.damage + e.army * 0.15) * (0.7 + Math.random() * 0.5);
                 p.army -= damage;
@@ -150,65 +249,50 @@ class Battle {
 
         this.log.push(message);
         this.turn = 'player';
+        this.updateUI();
 
-        // Таймер на ход игрока
         this.timer = setTimeout(() => {
             this.nextTurn();
         }, this.turnTime);
     }
 
-    // ============================================================
-    // ОТВЕТ ВРАГА НА ДЕЙСТВИЯ ИГРОКА
-    // ============================================================
     enemyResponse() {
         const p = this.player;
         const e = this.enemy;
         let damage = 0;
         let message = '';
 
-        // Враг отвечает на атаку
         if (this.strategy === 'attack' || this.strategy === 'flank') {
             damage = (e.damage * 0.5 + e.army * 0.05) * (0.5 + Math.random() * 0.5);
             p.army -= damage;
             message = `🏹 Враг отвечает! Потеряно ${Math.round(damage)} солдат.`;
         } else if (this.strategy === 'siege') {
-            // Если игрок использует осадные орудия, враг пытается их уничтожить
-            const siegeDamage = e.army * 0.02 + 5;
-            p.army -= siegeDamage;
-            message = `🔥 Враг атакует осадные орудия! Потеряно ${Math.round(siegeDamage)} солдат.`;
+            damage = e.army * 0.02 + 3;
+            p.army -= damage;
+            message = `🔥 Враг атакует орудия! Потеряно ${Math.round(damage)} солдат.`;
         } else {
             damage = e.damage * 0.2;
             p.army -= damage;
             message = `💢 Враг контратакует! Потеряно ${Math.round(damage)} солдат.`;
         }
 
-        // Снижение морали врага
         e.morale = Math.max(0, e.morale - 0.5);
-
         return message;
     }
 
-    // ============================================================
-    // ОСТАНОВКА БОЯ
-    // ============================================================
     stop() {
         if (this.timer) {
             clearTimeout(this.timer);
             this.timer = null;
         }
         this.phase = this.phase === 'active' ? 'stop' : this.phase;
+        this.updateUI();
     }
 
-    // ============================================================
-    // ПОЛУЧИТЬ ЛОГ
-    // ============================================================
     getLog() {
         return this.log.slice(-10);
     }
 
-    // ============================================================
-    // ПОЛУЧИТЬ СТАТУС
-    // ============================================================
     getStatus() {
         return {
             player: {
@@ -227,40 +311,150 @@ class Battle {
             log: this.getLog()
         };
     }
+
+    updateUI() {
+        const status = this.getStatus();
+        const p = status.player;
+        const e = status.enemy;
+
+        document.getElementById('p-hp').textContent = p.hp;
+        document.getElementById('p-maxhp').textContent = this.player.maxHp;
+        document.getElementById('p-army').textContent = Math.round(p.army);
+        
+        const hpPercent = Math.max(0, (p.hp / this.player.maxHp) * 100);
+        document.getElementById('hp-fill').style.width = hpPercent + '%';
+        document.getElementById('hp-fill').className = 'hp-fill' + (hpPercent < 30 ? ' danger' : '');
+
+        document.getElementById('e-hp').textContent = e.hp;
+        document.getElementById('e-maxhp').textContent = this.enemy.maxHp;
+        document.getElementById('e-army').textContent = Math.round(e.army);
+        document.getElementById('e-morale').textContent = e.morale;
+
+        const eHpPercent = Math.max(0, (e.hp / this.enemy.maxHp) * 100);
+        document.getElementById('e-hp-fill').style.width = eHpPercent + '%';
+
+        // Статус
+        const badge = document.getElementById('status-badge');
+        if (status.phase === 'victory') {
+            badge.textContent = '🎉 ПОБЕДА!';
+            badge.className = 'status-badge badge-victory';
+        } else if (status.phase === 'defeat') {
+            badge.textContent = '💀 ПОРАЖЕНИЕ';
+            badge.className = 'status-badge badge-defeat';
+        } else {
+            badge.textContent = '⚔️ ' + (status.turn === 'player' ? 'Ваш ход' : 'Ход врага');
+            badge.className = 'status-badge badge-active';
+        }
+
+        // Лог
+        const logBox = document.getElementById('log-box');
+        const logEntries = this.getLog();
+        logBox.innerHTML = logEntries.map(msg => 
+            `<div class="log-entry">${msg}</div>`
+        ).join('') || '<div class="log-entry" style="color:#6a5a48;">📜 Лог пуст</div>';
+        logBox.scrollTop = logBox.scrollHeight;
+
+        // Сообщение
+        const lastLog = this.log[this.log.length - 1] || '';
+        document.getElementById('game-message').textContent = lastLog;
+
+        // Кнопки
+        this.updateButtons(status);
+    }
+
+    updateButtons(status) {
+        const container = document.getElementById('actions-container');
+        container.innerHTML = '';
+
+        if (status.phase === 'victory' || status.phase === 'defeat') {
+            const btn = document.createElement('button');
+            btn.className = 'btn-game';
+            btn.textContent = '🔄 Новый бой';
+            btn.onclick = () => resetBattle();
+            container.appendChild(btn);
+            return;
+        }
+
+        if (status.turn === 'player') {
+            const strategies = [
+                { id: 'attack', label: '⚔️ Атаковать' },
+                { id: 'defend', label: '🛡️ Защищаться' },
+                { id: 'flank', label: '🏹 Фланг' },
+                { id: 'siege', label: '🔥 Осада' }
+            ];
+            strategies.forEach(s => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-game';
+                btn.textContent = s.label;
+                btn.onclick = () => {
+                    if (window.battle) {
+                        window.battle.setStrategy(s.id);
+                    }
+                };
+                container.appendChild(btn);
+            });
+        } else {
+            const btn = document.createElement('button');
+            btn.className = 'btn-game';
+            btn.textContent = '⏳ Ход врага...';
+            btn.disabled = true;
+            container.appendChild(btn);
+        }
+    }
 }
 
 // ============================================================
-// СОЗДАНИЕ БОЯ (ИСПОЛЬЗОВАНИЕ)
+// УПРАВЛЕНИЕ
 // ============================================================
-function createBattle(playerStats, enemyStats) {
-    const battle = new Battle(playerStats, enemyStats);
-    return battle.start();
+let battle = null;
+let autoMode = false;
+
+function startBattle() {
+    const player = {
+        hp: 100,
+        maxHp: 100,
+        damage: 20,
+        defense: 10,
+        agility: 15,
+        army: 100,
+        maxArmy: 100
+    };
+
+    const enemy = {
+        hp: 80,
+        maxHp: 80,
+        damage: 15,
+        defense: 8,
+        agility: 10,
+        army: 80,
+        morale: 100
+    };
+
+    if (battle) battle.stop();
+    battle = new Battle(player, enemy);
+    window.battle = battle;
+    battle.start();
+    document.getElementById('story-text').textContent = '⚔️ Бой начался! Выбирайте стратегию.';
+}
+
+function resetBattle() {
+    if (battle) battle.stop();
+    startBattle();
+}
+
+function toggleAuto() {
+    if (!battle) return;
+    battle.autoMode = !battle.autoMode;
+    document.getElementById('game-message').textContent = battle.autoMode ? '🤖 Авто-ход ВКЛЮЧЁН' : '🧠 Авто-ход ВЫКЛЮЧЕН';
+    if (battle.autoMode && battle.turn === 'player') {
+        battle.nextTurn();
+    }
 }
 
 // ============================================================
-// ПРИМЕР ИСПОЛЬЗОВАНИЯ (для теста)
+// ЗАПУСК
 // ============================================================
-/*
-const player = {
-    hp: 100,
-    maxHp: 100,
-    damage: 20,
-    defense: 10,
-    agility: 15,
-    army: 100,
-    maxArmy: 100
-};
-
-const enemy = {
-    hp: 80,
-    maxHp: 80,
-    damage: 15,
-    defense: 8,
-    agility: 10,
-    army: 80,
-    morale: 100
-};
-
-const battle = createBattle(player, enemy);
-// ... и далее через интерфейс вызываем battle.setStrategy('attack') и т.д.
-*/
+startBattle();
+</script>
+</body>
+    </html>
