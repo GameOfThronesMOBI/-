@@ -4,9 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🐺 Игра Престолов: MOBI</title>
-    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- ========================================================== -->
+    <!-- ВЕСЬ CSS (из монолита)                                     -->
+    <!-- ========================================================== -->
+    <style>
+        /* ============================================================ */
+        /* ВСТАВЬ СЮДА ВЕСЬ СВОЙ CSS ИЗ МОНОЛИТА                      */
+        /* (весь блок между <style> и </style> из index (1).html)       */
+        /* ============================================================ */
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { background:#0d0a08; font-family:'Georgia',serif; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:10px; }
+        #app { max-width:500px; width:100%; background:#1f1712; border:1px solid #3d3026; border-radius:20px; padding:16px 14px; box-shadow:0 20px 50px rgba(0,0,0,0.9); }
+        .header { text-align:center; border-bottom:1px solid #3d3026; padding-bottom:10px; margin-bottom:12px; }
+        .header h1 { color:#c9b694; font-size:20px; font-weight:400; letter-spacing:4px; }
+        .header h2 { color:#6a5a48; font-size:11px; font-weight:400; letter-spacing:6px; }
+        .page-title { color:#c9b694; text-align:center; font-size:17px; margin-bottom:14px; }
+        .form-group { margin-bottom:12px; }
+        label { display:block; color:#a08d78; font-size:13px; margin-bottom:4px; }
+        input, select { width:100%; padding:12px 14px; background:#120e0b; border:1px solid #3d3026; border-radius:10px; color:#d4c5b0; font-size:15px; font-family:'Georgia',serif; }
+        input:focus, select:focus { outline:none; border-color:#8a7a5a; }
+        select { background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236a5a48' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat:no-repeat; background-position:right 14px center; background-size:18px; }
+        select option { background:#1f1712; color:#d4c5b0; }
+        small { display:block; color:#5a4a3a; font-size:11px; margin-top:3px; }
+        .btn { width:100%; padding:12px 14px; border:1px solid #3d3026; border-radius:10px; font-family:'Georgia',serif; font-size:14px; cursor:pointer; text-align:center; margin-top:6px; background:#2a201a; color:#c9b694; transition:0.2s; }
+        .btn:active { background:#3d3026; transform:scale(0.98); }
+        .btn-primary { background:#3d2e20; color:#c9b694; }
+        .btn-secondary { background:transparent; color:#6a5a48; border-color:#2a201a; }
+        .btn-danger { background:#2a1a12; color:#6a5a48; border-color:#2a201a; }
+        .btn-small { display:inline-block; width:auto; padding:4px 12px; margin:0; font-size:12px; }
+        .btn-game { background:#2a201a; border:1px solid #3d3026; color:#c9b694; padding:11px 14px; border-radius:10px; font-size:14px; cursor:pointer; width:100%; text-align:left; margin-top:5px; }
+        .btn-game:active { background:#3d3026; }
+        .btn-game:disabled { opacity:0.4; pointer-events:none; }
+        .divider { text-align:center; color:#3d3026; padding:12px 0; font-size:13px; letter-spacing:3px; }
+        .msg-error { background:#2a1210; border:1px solid #4a2a20; color:#c96a5a; padding:10px 14px; border-radius:10px; margin-bottom:14px; text-align:center; font-size:14px; }
+        .msg-success { background:#122a1a; border:1px solid #2a4a2a; color:#7ac98a; padding:14px; border-radius:10px; margin-bottom:14px; text-align:center; font-size:14px; line-height:1.6; }
+        .hide { display:none !important; }
+        #menu-bar { background:#120e0b; border:1px solid #2a201a; border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:13px; line-height:1.5; color:#b8a890; }
+        .menu-top { display:flex; justify-content:space-between; border-bottom:1px solid #1a1410; padding-bottom:4px; margin-bottom:4px; }
+        .menu-stats { display:flex; justify-content:space-between; flex-wrap:wrap; padding:2px 0; }
+        .menu-resources { display:flex; justify-content:space-between; padding:2px 0; border-top:1px solid #1a1410; margin-top:4px; padding-top:4px; }
+        .menu-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; padding-top:6px; border-top:1px solid #1a1410; }
+        .menu-btn { flex:1; min-width:55px; padding:6px; background:#2a201a; border:1px solid #3d3026; border-radius:8px; color:#c9b694; font-family:'Georgia',serif; font-size:11px; cursor:pointer; text-align:center; }
+        .menu-btn:active { background:#3d3026; transform:scale(0.96); }
+        .story-box { background:#120e0b; border:1px solid #2a201a; border-radius:12px; padding:14px; margin-bottom:12px; min-height:100px; }
+        .story-box h4 { color:#6a5a48; font-size:15px; font-weight:400; margin-bottom:6px; }
+        .story-box p { color:#b8a890; font-size:14px; line-height:1.7; white-space:pre-line; }
+        .story-box .game-msg { color:#6a5a48; font-style:italic; margin-top:10px; padding-top:8px; border-top:1px solid #1f1712; font-size:13px; min-height:20px; }
+        .action-group { margin-top:10px; padding-top:10px; border-top:1px solid #1f1712; }
+        .action-group p { color:#6a5a48; font-size:13px; margin-bottom:6px; letter-spacing:1px; }
+        .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:flex; justify-content:center; align-items:center; z-index:1000; padding:15px; }
+        .modal-overlay.hide { display:none; }
+        .modal-box { background:#1f1712; border:1px solid #3d3026; border-radius:16px; padding:20px 18px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; }
+        .modal-box .modal-header { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3d3026; padding-bottom:10px; margin-bottom:14px; }
+        .modal-box .modal-header h3 { color:#c9b694; font-size:18px; font-weight:400; letter-spacing:2px; }
+        .modal-box .modal-header .close-btn { background:none; border:none; color:#6a5a48; font-size:24px; cursor:pointer; padding:0 8px; }
+        .modal-section { margin-bottom:14px; }
+        .modal-section h4 { color:#6a5a48; font-size:14px; font-weight:400; letter-spacing:1px; border-bottom:1px solid #2a201a; padding-bottom:4px; margin-bottom:8px; }
+        .modal-section .row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:13px; color:#b8a890; border-bottom:1px solid #1a1410; gap:8px; }
+        .modal-section .row:last-child { border-bottom:none; }
+        .modal-section .row .label { color:#7a6a58; flex:1; }
+        .modal-section .row .value { color:#c9b694; text-align:right; white-space:nowrap; }
+        .status-busy { color:#c96a5a; font-size:13px; text-align:center; padding:6px; background:#1a0e0a; border-radius:8px; margin-bottom:8px; }
+        .status-busy.hide { display:none; }
+        .footer { text-align:center; color:#2a201a; font-size:10px; margin-top:14px; padding-top:10px; border-top:1px solid #1f1712; letter-spacing:3px; }
+        .online-bar { background:#120e0b; border:1px solid #2a201a; border-radius:10px; padding:8px 12px; margin-bottom:10px; font-size:12px; color:#7a6a58; display:flex; justify-content:space-between; flex-wrap:wrap; }
+        .online-bar span { color:#c9b694; }
+        .online-bar .online-click { cursor:pointer; color:#8a7a5a; }
+        .tabs { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:10px; }
+        .tab-btn { flex:1; min-width:50px; padding:8px 6px; background:#2a201a; border:1px solid #3d3026; border-radius:8px; color:#c9b694; font-family:'Georgia',serif; font-size:11px; cursor:pointer; text-align:center; }
+        .tab-btn.active { background:#3d2e20; border-color:#8a7a5a; }
+        .tab-btn:active { background:#3d3026; }
+        .stall-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px; }
+        .stall-card { background:#120e0b; border:1px solid #2a201a; border-radius:10px; padding:10px; text-align:center; cursor:pointer; }
+        .stall-card:active { background:#1f1712; }
+        .stall-card .stall-number { color:#6a5a48; font-size:12px; }
+        .stall-card .stall-status { font-size:11px; margin-top:4px; }
+        .stall-card .stall-owner { color:#c9b694; font-size:13px; }
+        .badge-green { color:#7ac98a; }
+        .badge-red { color:#c96a5a; }
+        .badge-yellow { color:#ffd700; }
+    </style>
 </head>
 <body>
+    <!-- ========================================================== -->
+    <!-- ВСЯ РАЗМЕТКА ИЗ МОНОЛИТА (ПОЛНАЯ)                         -->
+    <!-- ========================================================== -->
     <div id="app">
         <div class="header"><h1>🐺 ИГРА ПРЕСТОЛОВ</h1><h2>MOBI</h2></div>
         
@@ -29,16 +112,18 @@
             <div id="register-form">
                 <div class="form-group"><label>Имя персонажа</label><input type="text" id="reg-name" placeholder="например: Эддард"><small>Минимум 2 символа</small></div>
                 <div class="form-group"><label>Пароль</label><input type="password" id="reg-password" placeholder="Придумайте пароль"><small>Минимум 4 символа</small></div>
-                <div class="form-group"><label>Национальность</label><select id="reg-nationality">
-                    <option value="">▼ Выберите</option>
-                    <option value="Северные земли">❄️ Северные земли</option>
-                    <option value="Речные земли">🌊 Речные земли</option>
-                    <option value="Долина">🏔️ Долина</option>
-                    <option value="Западные земли">💰 Западные земли</option>
-                    <option value="Простор">🌾 Простор</option>
-                    <option value="Штормовые земли">⛈️ Штормовые земли</option>
-                    <option value="Дорн">☀️ Дорн</option>
-                </select></div>
+                <div class="form-group"><label>Национальность</label>
+                    <select id="reg-nationality">
+                        <option value="">▼ Выберите</option>
+                        <option value="Северные земли">❄️ Северные земли</option>
+                        <option value="Речные земли">🌊 Речные земли</option>
+                        <option value="Долина">🏔️ Долина</option>
+                        <option value="Западные земли">💰 Западные земли</option>
+                        <option value="Простор">🌾 Простор</option>
+                        <option value="Штормовые земли">⛈️ Штормовые земли</option>
+                        <option value="Дорн">☀️ Дорн</option>
+                    </select>
+                </div>
                 <div class="form-group"><label>Секретное слово</label><input type="text" id="reg-secret" placeholder="Для восстановления пароля"></div>
                 <button class="btn btn-primary" onclick="handleRegister()">🔥 ЗАРЕГИСТРИРОВАТЬСЯ</button>
                 <div class="divider">—</div>
@@ -48,10 +133,17 @@
 
         <!-- СТРАНИЦА ИГРЫ -->
         <div id="page-game" class="hide">
+            <div class="online-bar" onclick="showOnlineList()">
+                <span>👥 <span id="online-global">0</span> игроков</span>
+                <span>📍 <span id="online-region">0</span></span>
+                <span>🏙️ <span id="online-location">0</span></span>
+                <span class="online-click">📋 список</span>
+            </div>
+            
             <div id="menu-bar">
                 <div class="menu-top">
                     <div class="menu-time">🕐 <span id="menu-time">--:--</span> МСК | <span id="menu-period">🌤️ День</span></div>
-                    <div class="menu-location">🏠 <span id="menu-location">Таверна</span></div>
+                    <div class="menu-location">🏠 <span id="menu-location">Таверна</span> <span id="menu-location-level" style="color:#6a5a48;font-size:11px;"></span></div>
                 </div>
                 <div class="menu-stats">
                     <div class="menu-hp">❤️ <span id="menu-hp">60</span>/<span id="menu-hp-max">60</span></div>
@@ -63,8 +155,17 @@
                     <div class="menu-thirst">💧 <span id="menu-thirst">100</span>/100</div>
                     <div class="menu-fatigue">😴 <span id="menu-fatigue">100</span>/100</div>
                 </div>
+                <div class="menu-actions">
+                    <button class="menu-btn" onclick="openCharacter()">👤</button>
+                    <button class="menu-btn" onclick="openInventory()">🎒</button>
+                    <button class="menu-btn" onclick="openMap()">🗺️</button>
+                    <button class="menu-btn" onclick="openLog()">📜</button>
+                    <button class="menu-btn" onclick="openMainMenu()">📋</button>
+                </div>
             </div>
+            
             <div id="busy-status" class="status-busy hide">⏳ Вы заняты...</div>
+            
             <div class="story-box" id="story-box">
                 <h4 id="story-title">📍 Таверна</h4>
                 <p id="story-text">Добро пожаловать в таверну.</p>
@@ -74,82 +175,164 @@
                     <div id="game-message" class="game-msg"></div>
                 </div>
             </div>
+            
             <button class="btn btn-danger" onclick="handleLogout()">🚪 Выйти из игры</button>
         </div>
+        
         <div class="footer">❄️ ЗИМА БЛИЗКО</div>
     </div>
 
-    <!-- МОДАЛЬНЫЕ ОКНА -->
-    <div id="modal-character" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>👤 ПЕРСОНАЖ</h3><button class="close-btn">✕</button></div><div id="modal-content"></div></div></div>
-    <div id="modal-inventory" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🎒 ИНВЕНТАРЬ</h3><button class="close-btn">✕</button></div><div id="modal-inventory-content"></div></div></div>
-    <div id="modal-map" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🗺️ ПЕРЕМЕЩЕНИЕ</h3><button class="close-btn">✕</button></div><div id="modal-map-content"></div></div></div>
-    <div id="modal-menu" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>📋 МЕНЮ</h3><button class="close-btn">✕</button></div><div id="modal-menu-content"></div></div></div>
-    <div id="modal-log" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>📜 ЛОГ</h3><button class="close-btn">✕</button></div><div id="modal-log-content"></div></div></div>
-
-    <!-- ========================================================== -->
-    <!-- КНОПКА ОШИБОК (ДЛЯ ОТЛАДКИ)                               -->
-    <!-- ========================================================== -->
-    <button id="debugBtn" style="position:fixed;bottom:10px;right:10px;background:#c0392b;color:#fff;border:none;border-radius:50%;width:50px;height:50px;font-size:24px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.5);" onclick="showErrors()">🐛</button>
-
-    <div id="debugConsole" style="display:none;position:fixed;bottom:70px;right:10px;width:90%;max-height:300px;background:#1a1a2e;color:#fff;border:2px solid #c0392b;border-radius:12px;padding:12px;overflow-y:auto;z-index:9999;font-size:12px;font-family:monospace;white-space:pre-wrap;word-break:break-all;">
-        <div style="display:flex;justify-content:space-between;border-bottom:1px solid #333;padding-bottom:6px;margin-bottom:8px;">
-            <span>🐛 ОШИБКИ</span>
-            <span onclick="document.getElementById('debugConsole').style.display='none'" style="cursor:pointer;">✕</span>
+    <!-- ВСЕ МОДАЛЬНЫЕ ОКНА -->
+    <div id="modal-character" class="modal-overlay hide" onclick="if(event.target===this) closeCharacter()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>👤 ПЕРСОНАЖ</h3><button class="close-btn" onclick="closeCharacter()">✕</button></div>
+            <div id="modal-content"></div>
         </div>
-        <div id="debugContent">Ошибок нет</div>
     </div>
 
-    <script>
-        // ============================================================
-        // ПЕРЕХВАТ ОШИБОК
-        // ============================================================
-        window.onerror = function(message, source, lineno, colno, error) {
-            const content = document.getElementById('debugContent');
-            content.innerHTML = content.innerHTML === 'Ошибок нет' ? '' : content.innerHTML;
-            content.innerHTML += '❌ ' + message + '\n';
-            if (error && error.stack) {
-                content.innerHTML += error.stack + '\n\n';
-            }
-            document.getElementById('debugConsole').style.display = 'block';
-        };
+    <div id="modal-inventory" class="modal-overlay hide" onclick="if(event.target===this) closeInventory()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>🎒 ИНВЕНТАРЬ</h3><button class="close-btn" onclick="closeInventory()">✕</button></div>
+            <div id="modal-inventory-content"></div>
+        </div>
+    </div>
 
-        window.showErrors = function() {
-            const el = document.getElementById('debugConsole');
-            el.style.display = el.style.display === 'none' ? 'block' : 'none';
-        };
+    <div id="modal-map" class="modal-overlay hide" onclick="if(event.target===this) closeMap()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>🗺️ ПЕРЕМЕЩЕНИЕ</h3><button class="close-btn" onclick="closeMap()">✕</button></div>
+            <div id="modal-map-content"></div>
+        </div>
+    </div>
 
-        // Перехват ошибок в промисах
-        window.addEventListener('unhandledrejection', function(event) {
-            const content = document.getElementById('debugContent');
-            content.innerHTML = content.innerHTML === 'Ошибок нет' ? '' : content.innerHTML;
-            content.innerHTML += '⚠️ ' + event.reason + '\n';
-            document.getElementById('debugConsole').style.display = 'block';
-        });
+    <div id="modal-houses" class="modal-overlay hide" onclick="if(event.target===this) closeHouses()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>🏘️ ДОМА</h3><button class="close-btn" onclick="closeHouses()">✕</button></div>
+            <div id="modal-houses-content"></div>
+        </div>
+    </div>
 
-        // Перехват ошибок в setTimeout
-        const originalSetTimeout = window.setTimeout;
-        window.setTimeout = function(fn, delay) {
-            return originalSetTimeout(function() {
-                try {
-                    fn();
-                } catch(e) {
-                    const content = document.getElementById('debugContent');
-                    content.innerHTML = content.innerHTML === 'Ошибок нет' ? '' : content.innerHTML;
-                    content.innerHTML += '⏰ ' + e.message + '\n';
-                    if (e.stack) content.innerHTML += e.stack + '\n\n';
-                    document.getElementById('debugConsole').style.display = 'block';
-                }
-            }, delay);
-        };
-    </script>
+    <div id="modal-online" class="modal-overlay hide" onclick="if(event.target===this) closeOnline()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>👥 ОНЛАЙН</h3><button class="close-btn" onclick="closeOnline()">✕</button></div>
+            <div id="modal-online-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-menu" class="modal-overlay hide" onclick="if(event.target===this) closeMenu()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>📋 МЕНЮ</h3><button class="close-btn" onclick="closeMenu()">✕</button></div>
+            <div id="modal-menu-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-trade" class="modal-overlay hide" onclick="if(event.target===this) closeTrade()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>🛒 ТОРГОВЛЯ</h3><button class="close-btn" onclick="closeTrade()">✕</button></div>
+            <div id="modal-trade-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-guild" class="modal-overlay hide" onclick="if(event.target===this) closeGuild()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>🏛️ ГИЛЬДИЯ ТОРГОВЦЕВ</h3><button class="close-btn" onclick="closeGuild()">✕</button></div>
+            <div id="modal-guild-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-log" class="modal-overlay hide" onclick="if(event.target===this) closeLog()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>📜 ЛОГ СОБЫТИЙ</h3><button class="close-btn" onclick="closeLog()">✕</button></div>
+            <div id="modal-log-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-magistrate" class="modal-overlay hide" onclick="if(event.target===this) closeMagistrate()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>📜 МАГИСТРАТ</h3><button class="close-btn" onclick="closeMagistrate()">✕</button></div>
+            <div id="modal-magistrate-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-storage" class="modal-overlay hide" onclick="if(event.target===this) closeStorage()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>📦 СКЛАД</h3><button class="close-btn" onclick="closeStorage()">✕</button></div>
+            <div id="modal-storage-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-storage-hold" class="modal-overlay hide" onclick="if(event.target===this) closeStorageHold()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>📦 КАМЕРА ХРАНЕНИЯ</h3><button class="close-btn" onclick="closeStorageHold()">✕</button></div>
+            <div id="modal-storage-hold-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-stable" class="modal-overlay hide" onclick="if(event.target===this) closeStable()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>🐴 КОНЮШНЯ</h3><button class="close-btn" onclick="closeStable()">✕</button></div>
+            <div id="modal-stable-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-temple" class="modal-overlay hide" onclick="if(event.target===this) closeTemple()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>⛪ ВЕЛИКАЯ СЕПТА</h3><button class="close-btn" onclick="closeTemple()">✕</button></div>
+            <div id="modal-temple-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-port" class="modal-overlay hide" onclick="if(event.target===this) closePort()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>⛵ ПОРТ</h3><button class="close-btn" onclick="closePort()">✕</button></div>
+            <div id="modal-port-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-jail" class="modal-overlay hide" onclick="if(event.target===this) closeJail()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>⛓️ ТЮРЬМА</h3><button class="close-btn" onclick="closeJail()">✕</button></div>
+            <div id="modal-jail-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-market" class="modal-overlay hide" onclick="if(event.target===this) closeMarket()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>🏪 РЫНОК</h3><button class="close-btn" onclick="closeMarket()">✕</button></div>
+            <div id="modal-market-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-stall" class="modal-overlay hide" onclick="if(event.target===this) closeStall()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>🏪 ЛАВКА</h3><button class="close-btn" onclick="closeStall()">✕</button></div>
+            <div id="modal-stall-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-library" class="modal-overlay hide" onclick="if(event.target===this) closeLibrary()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>📚 БИБЛИОТЕКА</h3><button class="close-btn" onclick="closeLibrary()">✕</button></div>
+            <div id="modal-library-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-guildhall" class="modal-overlay hide" onclick="if(event.target===this) closeGuildHall()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>🗡️ ГИЛЬДИЯ НАЁМНИКОВ</h3><button class="close-btn" onclick="closeGuildHall()">✕</button></div>
+            <div id="modal-guildhall-content"></div>
+        </div>
+    </div>
+
+    <div id="modal-brothel" class="modal-overlay hide" onclick="if(event.target===this) closeBrothel()">
+        <div class="modal-box">
+            <div class="modal-header"><h3>💃 БОРДЕЛЬ</h3><button class="close-btn" onclick="closeBrothel()">✕</button></div>
+            <div id="modal-brothel-content"></div>
+        </div>
+    </div>
 
     <!-- ========================================================== -->
-    <!-- ПОДКЛЮЧЕНИЕ JS (type="module")                              -->
+    <!-- ПОДКЛЮЧЕНИЕ main.js (ЕДИНСТВЕННЫЙ ФАЙЛ)                   -->
     <!-- ========================================================== -->
-    <script type="module" src="js/core/config.js"></script>
-    <script type="module" src="js/core/state.js"></script>
-    <script type="module" src="js/core/storage.js"></script>
-    <script type="module" src="js/core/utils.js"></script>
     <script type="module" src="js/main.js"></script>
 </body>
 </html>
