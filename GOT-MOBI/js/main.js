@@ -11,7 +11,7 @@ import { showPage, setMessage, hash, addLog, formatCurrency, spendMoney, convert
 import { NATIONALITIES } from './core/config.js';
 
 // ============================================================
-// ДЕЛАЕМ ФУНКЦИИ ГЛОБАЛЬНЫМИ (для onclick в HTML)
+// ДЕЛАЕМ ФУНКЦИИ ГЛОБАЛЬНЫМИ (ДЛЯ onclick В HTML)
 // ============================================================
 window.showPage = showPage;
 window.setMessage = setMessage;
