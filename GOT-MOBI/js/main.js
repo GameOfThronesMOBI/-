@@ -2,10 +2,24 @@
 // ЗАПУСК ИГРЫ (js/main.js)
 // ============================================================
 
-import { users, currentUser } from './core/state.js';
+// ============================================================
+// ИМПОРТЫ
+// ============================================================
+import { users, currentUser, gameLog } from './core/state.js';
 import { loadData, saveData, initTraderStock } from './core/storage.js';
-import { showPage, setMessage, hash, addLog } from './core/utils.js';
+import { showPage, setMessage, hash, addLog, formatCurrency, spendMoney, convertCurrency, getTimeOfDay } from './core/utils.js';
 import { NATIONALITIES } from './core/config.js';
+
+// ============================================================
+// ДЕЛАЕМ ФУНКЦИИ ГЛОБАЛЬНЫМИ (для onclick в HTML)
+// ============================================================
+window.showPage = showPage;
+window.setMessage = setMessage;
+window.hash = hash;
+window.addLog = addLog;
+window.formatCurrency = formatCurrency;
+window.spendMoney = spendMoney;
+window.convertCurrency = convertCurrency;
 
 // ============================================================
 // РЕГИСТРАЦИЯ
@@ -149,7 +163,6 @@ function enterGame(name) {
     user.game.online = true;
     user.game.lastActive = Date.now();
     
-    // Обновляем меню
     updateMenu();
     updateStory();
     updateActions();
