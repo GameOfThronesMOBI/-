@@ -4,14 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🐺 Игра Престолов: MOBI</title>
-    
-    <!-- ========================================================== -->
-    <!-- ВЕСЬ CSS (из монолита)                                     -->
-    <!-- ========================================================== -->
     <style>
         /* ============================================================ */
-        /* ВСТАВЬ СЮДА ВЕСЬ СВОЙ CSS ИЗ МОНОЛИТА                      */
-        /* (весь блок между <style> и </style> из index (1).html)       */
+        /* ТВОЙ CSS (ИЗ index (1).html)                                */
         /* ============================================================ */
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body { background:#0d0a08; font-family:'Georgia',serif; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:10px; }
@@ -87,13 +82,11 @@
     </style>
 </head>
 <body>
-    <!-- ========================================================== -->
-    <!-- ВСЯ РАЗМЕТКА ИЗ МОНОЛИТА (ПОЛНАЯ)                         -->
-    <!-- ========================================================== -->
+    <!-- ============================================================ -->
+    <!-- ВСЯ ТВОЯ РАЗМЕТКА (ИЗ index (1).html)                       -->
+    <!-- ============================================================ -->
     <div id="app">
         <div class="header"><h1>🐺 ИГРА ПРЕСТОЛОВ</h1><h2>MOBI</h2></div>
-        
-        <!-- СТРАНИЦА ВХОДА -->
         <div id="page-login">
             <div class="page-title">ВХОД</div>
             <div id="login-error" class="msg-error hide"></div>
@@ -103,8 +96,6 @@
             <div class="divider">— ИЛИ —</div>
             <button class="btn btn-secondary" onclick="showPage('register')">📜 СОЗДАТЬ ПЕРСОНАЖА</button>
         </div>
-
-        <!-- СТРАНИЦА РЕГИСТРАЦИИ -->
         <div id="page-register" class="hide">
             <div class="page-title">СОЗДАНИЕ ПЕРСОНАЖА</div>
             <div id="register-error" class="msg-error hide"></div>
@@ -112,227 +103,350 @@
             <div id="register-form">
                 <div class="form-group"><label>Имя персонажа</label><input type="text" id="reg-name" placeholder="например: Эддард"><small>Минимум 2 символа</small></div>
                 <div class="form-group"><label>Пароль</label><input type="password" id="reg-password" placeholder="Придумайте пароль"><small>Минимум 4 символа</small></div>
-                <div class="form-group"><label>Национальность</label>
-                    <select id="reg-nationality">
-                        <option value="">▼ Выберите</option>
-                        <option value="Северные земли">❄️ Северные земли</option>
-                        <option value="Речные земли">🌊 Речные земли</option>
-                        <option value="Долина">🏔️ Долина</option>
-                        <option value="Западные земли">💰 Западные земли</option>
-                        <option value="Простор">🌾 Простор</option>
-                        <option value="Штормовые земли">⛈️ Штормовые земли</option>
-                        <option value="Дорн">☀️ Дорн</option>
-                    </select>
-                </div>
+                <div class="form-group"><label>Национальность</label><select id="reg-nationality"><option value="">▼ Выберите</option><option value="Северные земли">❄️ Северные земли</option><option value="Речные земли">🌊 Речные земли</option><option value="Долина">🏔️ Долина</option><option value="Западные земли">💰 Западные земли</option><option value="Простор">🌾 Простор</option><option value="Штормовые земли">⛈️ Штормовые земли</option><option value="Дорн">☀️ Дорн</option></select></div>
                 <div class="form-group"><label>Секретное слово</label><input type="text" id="reg-secret" placeholder="Для восстановления пароля"></div>
                 <button class="btn btn-primary" onclick="handleRegister()">🔥 ЗАРЕГИСТРИРОВАТЬСЯ</button>
                 <div class="divider">—</div>
                 <button class="btn btn-secondary" onclick="showPage('login')">Уже есть персонаж? Войти →</button>
             </div>
         </div>
-
-        <!-- СТРАНИЦА ИГРЫ -->
         <div id="page-game" class="hide">
-            <div class="online-bar" onclick="showOnlineList()">
-                <span>👥 <span id="online-global">0</span> игроков</span>
-                <span>📍 <span id="online-region">0</span></span>
-                <span>🏙️ <span id="online-location">0</span></span>
-                <span class="online-click">📋 список</span>
-            </div>
-            
+            <div class="online-bar" onclick="showOnlineList()"><span>👥 <span id="online-global">0</span> игроков</span><span>📍 <span id="online-region">0</span></span><span>🏙️ <span id="online-location">0</span></span><span class="online-click">📋 список</span></div>
             <div id="menu-bar">
-                <div class="menu-top">
-                    <div class="menu-time">🕐 <span id="menu-time">--:--</span> МСК | <span id="menu-period">🌤️ День</span></div>
-                    <div class="menu-location">🏠 <span id="menu-location">Таверна</span> <span id="menu-location-level" style="color:#6a5a48;font-size:11px;"></span></div>
-                </div>
-                <div class="menu-stats">
-                    <div class="menu-hp">❤️ <span id="menu-hp">60</span>/<span id="menu-hp-max">60</span></div>
-                    <div class="menu-level">📈 Уровень: <span id="menu-level">1</span></div>
-                    <div class="menu-money">🪙 <span id="menu-gold">0</span> | ⚪ <span id="menu-silver">0</span> | 🟤 <span id="menu-copper">0</span></div>
-                </div>
-                <div class="menu-resources">
-                    <div class="menu-food">🍖 <span id="menu-food">100</span>/100</div>
-                    <div class="menu-thirst">💧 <span id="menu-thirst">100</span>/100</div>
-                    <div class="menu-fatigue">😴 <span id="menu-fatigue">100</span>/100</div>
-                </div>
+                <div class="menu-top"><div class="menu-time">🕐 <span id="menu-time">--:--</span> МСК | <span id="menu-period">🌤️ День</span></div><div class="menu-location">🏠 <span id="menu-location">Таверна</span> <span id="menu-location-level" style="color:#6a5a48;font-size:11px;"></span></div></div>
+                <div class="menu-stats"><div class="menu-hp">❤️ <span id="menu-hp">60</span>/<span id="menu-hp-max">60</span></div><div class="menu-level">📈 Уровень: <span id="menu-level">1</span></div><div class="menu-money">🪙 <span id="menu-gold">0</span> | ⚪ <span id="menu-silver">0</span> | 🟤 <span id="menu-copper">0</span></div></div>
+                <div class="menu-resources"><div class="menu-food">🍖 <span id="menu-food">100</span>/100</div><div class="menu-thirst">💧 <span id="menu-thirst">100</span>/100</div><div class="menu-fatigue">😴 <span id="menu-fatigue">100</span>/100</div></div>
                 <div class="menu-actions">
-                    <button class="menu-btn" onclick="openCharacter()">👤</button>
-                    <button class="menu-btn" onclick="openInventory()">🎒</button>
-                    <button class="menu-btn" onclick="openMap()">🗺️</button>
-                    <button class="menu-btn" onclick="openLog()">📜</button>
-                    <button class="menu-btn" onclick="openMainMenu()">📋</button>
+                    <button class="menu-btn" onclick="openCharacter()">👤</button><button class="menu-btn" onclick="openInventory()">🎒</button><button class="menu-btn" onclick="openMap()">🗺️</button><button class="menu-btn" onclick="openLog()">📜</button><button class="menu-btn" onclick="openMainMenu()">📋</button>
                 </div>
             </div>
-            
             <div id="busy-status" class="status-busy hide">⏳ Вы заняты...</div>
-            
-            <div class="story-box" id="story-box">
-                <h4 id="story-title">📍 Таверна</h4>
-                <p id="story-text">Добро пожаловать в таверну.</p>
-                <div class="action-group">
-                    <p>⚡ Что делаете?</p>
-                    <div id="actions-container"></div>
-                    <div id="game-message" class="game-msg"></div>
-                </div>
-            </div>
-            
+            <div class="story-box" id="story-box"><h4 id="story-title">📍 Таверна</h4><p id="story-text">Добро пожаловать в таверну.</p><div class="action-group"><p>⚡ Что делаете?</p><div id="actions-container"></div><div id="game-message" class="game-msg"></div></div></div>
             <button class="btn btn-danger" onclick="handleLogout()">🚪 Выйти из игры</button>
         </div>
-        
         <div class="footer">❄️ ЗИМА БЛИЗКО</div>
     </div>
-
     <!-- ВСЕ МОДАЛЬНЫЕ ОКНА -->
-    <div id="modal-character" class="modal-overlay hide" onclick="if(event.target===this) closeCharacter()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>👤 ПЕРСОНАЖ</h3><button class="close-btn" onclick="closeCharacter()">✕</button></div>
-            <div id="modal-content"></div>
-        </div>
-    </div>
+    <div id="modal-character" class="modal-overlay hide" onclick="if(event.target===this) closeCharacter()"><div class="modal-box"><div class="modal-header"><h3>👤 ПЕРСОНАЖ</h3><button class="close-btn" onclick="closeCharacter()">✕</button></div><div id="modal-content"></div></div></div>
+    <div id="modal-inventory" class="modal-overlay hide" onclick="if(event.target===this) closeInventory()"><div class="modal-box"><div class="modal-header"><h3>🎒 ИНВЕНТАРЬ</h3><button class="close-btn" onclick="closeInventory()">✕</button></div><div id="modal-inventory-content"></div></div></div>
+    <div id="modal-map" class="modal-overlay hide" onclick="if(event.target===this) closeMap()"><div class="modal-box"><div class="modal-header"><h3>🗺️ ПЕРЕМЕЩЕНИЕ</h3><button class="close-btn" onclick="closeMap()">✕</button></div><div id="modal-map-content"></div></div></div>
+    <div id="modal-houses" class="modal-overlay hide" onclick="if(event.target===this) closeHouses()"><div class="modal-box"><div class="modal-header"><h3>🏘️ ДОМА</h3><button class="close-btn" onclick="closeHouses()">✕</button></div><div id="modal-houses-content"></div></div></div>
+    <div id="modal-online" class="modal-overlay hide" onclick="if(event.target===this) closeOnline()"><div class="modal-box"><div class="modal-header"><h3>👥 ОНЛАЙН</h3><button class="close-btn" onclick="closeOnline()">✕</button></div><div id="modal-online-content"></div></div></div>
+    <div id="modal-menu" class="modal-overlay hide" onclick="if(event.target===this) closeMenu()"><div class="modal-box"><div class="modal-header"><h3>📋 МЕНЮ</h3><button class="close-btn" onclick="closeMenu()">✕</button></div><div id="modal-menu-content"></div></div></div>
+    <div id="modal-trade" class="modal-overlay hide" onclick="if(event.target===this) closeTrade()"><div class="modal-box"><div class="modal-header"><h3>🛒 ТОРГОВЛЯ</h3><button class="close-btn" onclick="closeTrade()">✕</button></div><div id="modal-trade-content"></div></div></div>
+    <div id="modal-guild" class="modal-overlay hide" onclick="if(event.target===this) closeGuild()"><div class="modal-box"><div class="modal-header"><h3>🏛️ ГИЛЬДИЯ ТОРГОВЦЕВ</h3><button class="close-btn" onclick="closeGuild()">✕</button></div><div id="modal-guild-content"></div></div></div>
+    <div id="modal-log" class="modal-overlay hide" onclick="if(event.target===this) closeLog()"><div class="modal-box"><div class="modal-header"><h3>📜 ЛОГ СОБЫТИЙ</h3><button class="close-btn" onclick="closeLog()">✕</button></div><div id="modal-log-content"></div></div></div>
+    <div id="modal-magistrate" class="modal-overlay hide" onclick="if(event.target===this) closeMagistrate()"><div class="modal-box"><div class="modal-header"><h3>📜 МАГИСТРАТ</h3><button class="close-btn" onclick="closeMagistrate()">✕</button></div><div id="modal-magistrate-content"></div></div></div>
+    <div id="modal-storage" class="modal-overlay hide" onclick="if(event.target===this) closeStorage()"><div class="modal-box"><div class="modal-header"><h3>📦 СКЛАД</h3><button class="close-btn" onclick="closeStorage()">✕</button></div><div id="modal-storage-content"></div></div></div>
+    <div id="modal-storage-hold" class="modal-overlay hide" onclick="if(event.target===this) closeStorageHold()"><div class="modal-box"><div class="modal-header"><h3>📦 КАМЕРА ХРАНЕНИЯ</h3><button class="close-btn" onclick="closeStorageHold()">✕</button></div><div id="modal-storage-hold-content"></div></div></div>
+    <div id="modal-stable" class="modal-overlay hide" onclick="if(event.target===this) closeStable()"><div class="modal-box"><div class="modal-header"><h3>🐴 КОНЮШНЯ</h3><button class="close-btn" onclick="closeStable()">✕</button></div><div id="modal-stable-content"></div></div></div>
+    <div id="modal-temple" class="modal-overlay hide" onclick="if(event.target===this) closeTemple()"><div class="modal-box"><div class="modal-header"><h3>⛪ ВЕЛИКАЯ СЕПТА</h3><button class="close-btn" onclick="closeTemple()">✕</button></div><div id="modal-temple-content"></div></div></div>
+    <div id="modal-port" class="modal-overlay hide" onclick="if(event.target===this) closePort()"><div class="modal-box"><div class="modal-header"><h3>⛵ ПОРТ</h3><button class="close-btn" onclick="closePort()">✕</button></div><div id="modal-port-content"></div></div></div>
+    <div id="modal-jail" class="modal-overlay hide" onclick="if(event.target===this) closeJail()"><div class="modal-box"><div class="modal-header"><h3>⛓️ ТЮРЬМА</h3><button class="close-btn" onclick="closeJail()">✕</button></div><div id="modal-jail-content"></div></div></div>
+    <div id="modal-market" class="modal-overlay hide" onclick="if(event.target===this) closeMarket()"><div class="modal-box"><div class="modal-header"><h3>🏪 РЫНОК</h3><button class="close-btn" onclick="closeMarket()">✕</button></div><div id="modal-market-content"></div></div></div>
+    <div id="modal-stall" class="modal-overlay hide" onclick="if(event.target===this) closeStall()"><div class="modal-box"><div class="modal-header"><h3>🏪 ЛАВКА</h3><button class="close-btn" onclick="closeStall()">✕</button></div><div id="modal-stall-content"></div></div></div>
+    <div id="modal-library" class="modal-overlay hide" onclick="if(event.target===this) closeLibrary()"><div class="modal-box"><div class="modal-header"><h3>📚 БИБЛИОТЕКА</h3><button class="close-btn" onclick="closeLibrary()">✕</button></div><div id="modal-library-content"></div></div></div>
+    <div id="modal-guildhall" class="modal-overlay hide" onclick="if(event.target===this) closeGuildHall()"><div class="modal-box"><div class="modal-header"><h3>🗡️ ГИЛЬДИЯ НАЁМНИКОВ</h3><button class="close-btn" onclick="closeGuildHall()">✕</button></div><div id="modal-guildhall-content"></div></div></div>
+    <div id="modal-brothel" class="modal-overlay hide" onclick="if(event.target===this) closeBrothel()"><div class="modal-box"><div class="modal-header"><h3>💃 БОРДЕЛЬ</h3><button class="close-btn" onclick="closeBrothel()">✕</button></div><div id="modal-brothel-content"></div></div></div>
 
-    <div id="modal-inventory" class="modal-overlay hide" onclick="if(event.target===this) closeInventory()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>🎒 ИНВЕНТАРЬ</h3><button class="close-btn" onclick="closeInventory()">✕</button></div>
-            <div id="modal-inventory-content"></div>
-        </div>
-    </div>
+    <!-- ============================================================ -->
+    <!-- ВЕСЬ ТВОЙ main.js (ВСТАВЛЕН ЦЕЛИКОМ)                       -->
+    <!-- ============================================================ -->
+    <script>
+        // ============================================================
+        // ВЕСЬ ТВОЙ КОД ИЗ main.js
+        // ============================================================
+        import { users, currentUser, gameLog } from './core/state.js';
+        import { loadData, saveData, initTraderStock } from './core/storage.js';
+        import { showPage, setMessage, hash, addLog, formatCurrency, spendMoney, convertCurrency, getTimeOfDay } from './core/utils.js';
+        import { NATIONALITIES } from './core/config.js';
 
-    <div id="modal-map" class="modal-overlay hide" onclick="if(event.target===this) closeMap()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>🗺️ ПЕРЕМЕЩЕНИЕ</h3><button class="close-btn" onclick="closeMap()">✕</button></div>
-            <div id="modal-map-content"></div>
-        </div>
-    </div>
+        // ============================================================
+        // ДЕЛАЕМ ФУНКЦИИ ГЛОБАЛЬНЫМИ (ДЛЯ onclick В HTML)
+        // ============================================================
+        window.showPage = showPage;
+        window.setMessage = setMessage;
+        window.hash = hash;
+        window.addLog = addLog;
+        window.formatCurrency = formatCurrency;
+        window.spendMoney = spendMoney;
+        window.convertCurrency = convertCurrency;
 
-    <div id="modal-houses" class="modal-overlay hide" onclick="if(event.target===this) closeHouses()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>🏘️ ДОМА</h3><button class="close-btn" onclick="closeHouses()">✕</button></div>
-            <div id="modal-houses-content"></div>
-        </div>
-    </div>
+        // ============================================================
+        // РЕГИСТРАЦИЯ
+        // ============================================================
+        window.handleRegister = function() {
+            const name = document.getElementById('reg-name').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const nationality = document.getElementById('reg-nationality').value;
+            const secret = document.getElementById('reg-secret').value.trim();
+            const errEl = document.getElementById('register-error');
+            const okEl = document.getElementById('register-success');
+            const formEl = document.getElementById('register-form');
+            
+            errEl.classList.add('hide');
+            okEl.classList.add('hide');
+            formEl.classList.remove('hide');
+            
+            if (!name || !password || !nationality || !secret) {
+                errEl.textContent = '❌ Заполните все поля';
+                errEl.classList.remove('hide');
+                return;
+            }
+            if (name.length < 2) {
+                errEl.textContent = '❌ Имя слишком короткое';
+                errEl.classList.remove('hide');
+                return;
+            }
+            if (password.length < 4) {
+                errEl.textContent = '❌ Пароль слишком короткий';
+                errEl.classList.remove('hide');
+                return;
+            }
+            if (!NATIONALITIES[nationality]) {
+                errEl.textContent = '❌ Выберите национальность';
+                errEl.classList.remove('hide');
+                return;
+            }
+            if (users[name]) {
+                errEl.textContent = '❌ Это имя уже занято';
+                errEl.classList.remove('hide');
+                return;
+            }
+            
+            const now = Date.now();
+            const skills = {};
+            ['sword', 'spear', 'mace', 'axe', 'bow', 'crossbow', 'shield', 'dagger'].forEach(s => {
+                skills[s] = { level: 1, xp: 0 };
+            });
+            
+            users[name] = {
+                password: hash(password),
+                nationality: nationality,
+                secret: hash(secret),
+                created: now,
+                game: {
+                    gold: 100, silver: 0, copper: 0,
+                    food: 100, thirst: 100, fatigue: 100,
+                    hp: 60, maxHp: 60,
+                    level: 1, xp: 0, nextLevelXp: 100,
+                    attributePoints: 0,
+                    stats: { damage: 1, defense: 1, intelligence: 1, agility: 1 },
+                    equipment: { rightHand: null, leftHand: null, helmet: null, chestplate: null, shoulders: null, leggings: null, boots: null, gloves: null, belt: null, cloak: null, horse: null },
+                    skills: skills,
+                    stamina: { level: 1, xp: 0 },
+                    professions: { 'Шахтёр': 1, 'Лесоруб': 1, 'Охотник': 1, 'Кузнец': 1 },
+                    professionXp: { 'Шахтёр': 0, 'Лесоруб': 0, 'Охотник': 0, 'Кузнец': 0 },
+                    activeProfession: 'Охотник',
+                    lastProfessionChange: 0,
+                    inventory: [],
+                    location: { region: 'Королевские земли', location: 'Королевская Гавань', place: 'Таверна' },
+                    outside: false,
+                    death: null,
+                    lastReset: null,
+                    lastActive: now,
+                    online: true,
+                    lastResourceUpdate: now,
+                    luck: 0,
+                    lastHeal: null,
+                    lastPrayer: null,
+                    blessing: { active: false, expires: 0 },
+                    jail: null,
+                    activeBonuses: { crit: 5, pierce: 5, doubleHit: 5, counter: 5, points: 0 },
+                    marketStall: { owned: false, stallId: null, rentPaid: null, rentDays: 0, debt: 0 },
+                    housing: { type: null, purchased: null, rentPaid: null, rentDays: 0, debt: 0, storage: [], storageHold: [] },
+                    booksBoughtToday: 0,
+                    lastBookReset: now,
+                    quests: { completed: [], lastReset: 0, active: null, progress: {} },
+                    brothelBuffs: [],
+                    brothelRoom: false
+                }
+            };
+            
+            addLog('👤 ' + name + ' создал персонажа (' + nationality + ')');
+            saveData();
+            
+            formEl.classList.add('hide');
+            okEl.innerHTML = '✅ Поздравляем, <strong>' + name + '</strong>!<br>Вы — ' + nationality;
+            okEl.classList.remove('hide');
+            
+            localStorage.setItem('got_user', name);
+            setTimeout(function() {
+                enterGame(name);
+            }, 1200);
+        };
 
-    <div id="modal-online" class="modal-overlay hide" onclick="if(event.target===this) closeOnline()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>👥 ОНЛАЙН</h3><button class="close-btn" onclick="closeOnline()">✕</button></div>
-            <div id="modal-online-content"></div>
-        </div>
-    </div>
+        // ============================================================
+        // ВХОД
+        // ============================================================
+        window.handleLogin = function() {
+            const name = document.getElementById('login-name').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errEl = document.getElementById('login-error');
+            errEl.classList.add('hide');
+            
+            if (!name || !password) {
+                errEl.textContent = '❌ Заполните все поля';
+                errEl.classList.remove('hide');
+                return;
+            }
+            
+            const user = users[name];
+            if (!user || user.password !== hash(password)) {
+                errEl.textContent = '❌ Неверное имя или пароль';
+                errEl.classList.remove('hide');
+                return;
+            }
+            
+            localStorage.setItem('got_user', name);
+            addLog('👤 ' + name + ' вошёл в игру');
+            enterGame(name);
+        };
 
-    <div id="modal-menu" class="modal-overlay hide" onclick="if(event.target===this) closeMenu()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>📋 МЕНЮ</h3><button class="close-btn" onclick="closeMenu()">✕</button></div>
-            <div id="modal-menu-content"></div>
-        </div>
-    </div>
+        // ============================================================
+        // ВХОД В ИГРУ
+        // ============================================================
+        function enterGame(name) {
+            const user = users[name];
+            if (!user) return;
+            
+            showPage('game');
+            user.game.online = true;
+            user.game.lastActive = Date.now();
+            
+            updateMenu();
+            updateStory();
+            updateActions();
+            
+            setMessage('Добро пожаловать, ' + name + '!');
+            saveData();
+        }
 
-    <div id="modal-trade" class="modal-overlay hide" onclick="if(event.target===this) closeTrade()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>🛒 ТОРГОВЛЯ</h3><button class="close-btn" onclick="closeTrade()">✕</button></div>
-            <div id="modal-trade-content"></div>
-        </div>
-    </div>
+        // ============================================================
+        // ОБНОВЛЕНИЕ МЕНЮ
+        // ============================================================
+        window.updateMenu = function() {
+            const user = users[currentUser];
+            if (!user) return;
+            const g = user.game;
+            const time = getTimeOfDay();
+            
+            document.getElementById('menu-time').textContent = time.timeStr;
+            document.getElementById('menu-period').textContent = time.emoji + ' ' + time.period;
+            document.getElementById('menu-location').textContent = g.location.place || 'Таверна';
+            document.getElementById('menu-hp').textContent = Math.round(g.hp);
+            document.getElementById('menu-hp-max').textContent = Math.round(g.maxHp);
+            document.getElementById('menu-level').textContent = g.level;
+            document.getElementById('menu-gold').textContent = g.gold;
+            document.getElementById('menu-silver').textContent = g.silver;
+            document.getElementById('menu-copper').textContent = g.copper;
+            document.getElementById('menu-food').textContent = Math.round(g.food);
+            document.getElementById('menu-thirst').textContent = Math.round(g.thirst);
+            document.getElementById('menu-fatigue').textContent = Math.round(g.fatigue);
+        };
 
-    <div id="modal-guild" class="modal-overlay hide" onclick="if(event.target===this) closeGuild()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>🏛️ ГИЛЬДИЯ ТОРГОВЦЕВ</h3><button class="close-btn" onclick="closeGuild()">✕</button></div>
-            <div id="modal-guild-content"></div>
-        </div>
-    </div>
+        // ============================================================
+        // ОБНОВЛЕНИЕ ИСТОРИИ
+        // ============================================================
+        window.updateStory = function() {
+            const user = users[currentUser];
+            if (!user) return;
+            const place = user.game.location.place || 'Таверна';
+            document.getElementById('story-title').textContent = '📍 ' + place;
+            document.getElementById('story-text').textContent = 'Добро пожаловать в ' + place + '.';
+        };
 
-    <div id="modal-log" class="modal-overlay hide" onclick="if(event.target===this) closeLog()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>📜 ЛОГ СОБЫТИЙ</h3><button class="close-btn" onclick="closeLog()">✕</button></div>
-            <div id="modal-log-content"></div>
-        </div>
-    </div>
+        // ============================================================
+        // ОБНОВЛЕНИЕ ДЕЙСТВИЙ
+        // ============================================================
+        window.updateActions = function() {
+            const container = document.getElementById('actions-container');
+            container.innerHTML = '';
+            
+            const actions = [
+                { id: 'eat', label: '🍞 Поесть (+25 еды)' },
+                { id: 'rest', label: '🛏️ Отдохнуть (10 МП)' },
+                { id: 'talk', label: '🗣️ Поговорить' },
+                { id: 'inventory', label: '🎒 Инвентарь' },
+                { id: 'character', label: '👤 Персонаж' },
+                { id: 'logout', label: '🚪 Выйти' }
+            ];
+            
+            actions.forEach(a => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-game';
+                btn.textContent = a.label;
+                btn.onclick = function() {
+                    if (a.id === 'eat') {
+                        const user = users[currentUser];
+                        if (user && user.game.food < 100) {
+                            user.game.food = Math.min(100, user.game.food + 25);
+                            setMessage('🍞 Вы поели. Еда +25.');
+                            updateMenu();
+                            saveData();
+                        } else {
+                            setMessage('🍖 Вы сыты.');
+                        }
+                    } else if (a.id === 'rest') {
+                        const user = users[currentUser];
+                        if (user && spendMoney(user.game, 10)) {
+                            user.game.fatigue = Math.min(100, user.game.fatigue + 30);
+                            user.game.hp = Math.min(user.game.maxHp, user.game.hp + 15);
+                            setMessage('🛏️ Вы отдохнули. Усталость +30, HP +15.');
+                            updateMenu();
+                            saveData();
+                        } else {
+                            setMessage('❌ Недостаточно денег (10 МП).');
+                        }
+                    } else if (a.id === 'talk') {
+                        const msgs = [
+                            '🍺 Трактирщик: «Добро пожаловать, путник!»',
+                            '🍺 Трактирщик: «Хочешь заработать? Помой посуду.»',
+                            '🍺 Трактирщик: «Будь осторожен за воротами.»'
+                        ];
+                        setMessage(msgs[Math.floor(Math.random() * msgs.length)]);
+                    } else if (a.id === 'inventory') {
+                        setMessage('🎒 Инвентарь (пока пустой)');
+                    } else if (a.id === 'character') {
+                        setMessage('👤 Персонаж (информация)');
+                    } else if (a.id === 'logout') {
+                        handleLogout();
+                    }
+                };
+                container.appendChild(btn);
+            });
+        };
 
-    <div id="modal-magistrate" class="modal-overlay hide" onclick="if(event.target===this) closeMagistrate()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>📜 МАГИСТРАТ</h3><button class="close-btn" onclick="closeMagistrate()">✕</button></div>
-            <div id="modal-magistrate-content"></div>
-        </div>
-    </div>
+        // ============================================================
+        // ВЫХОД
+        // ============================================================
+        window.handleLogout = function() {
+            if (currentUser && users[currentUser]) {
+                users[currentUser].game.online = false;
+                users[currentUser].game.lastActive = Date.now();
+                addLog('👤 ' + currentUser + ' вышел из игры');
+                saveData();
+            }
+            localStorage.removeItem('got_user');
+            currentUser = null;
+            showPage('login');
+            document.getElementById('login-name').value = '';
+            document.getElementById('login-password').value = '';
+        };
 
-    <div id="modal-storage" class="modal-overlay hide" onclick="if(event.target===this) closeStorage()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>📦 СКЛАД</h3><button class="close-btn" onclick="closeStorage()">✕</button></div>
-            <div id="modal-storage-content"></div>
-        </div>
-    </div>
+        // ============================================================
+        // ЗАПУСК
+        // ============================================================
+        loadData();
+        initTraderStock();
 
-    <div id="modal-storage-hold" class="modal-overlay hide" onclick="if(event.target===this) closeStorageHold()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>📦 КАМЕРА ХРАНЕНИЯ</h3><button class="close-btn" onclick="closeStorageHold()">✕</button></div>
-            <div id="modal-storage-hold-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-stable" class="modal-overlay hide" onclick="if(event.target===this) closeStable()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>🐴 КОНЮШНЯ</h3><button class="close-btn" onclick="closeStable()">✕</button></div>
-            <div id="modal-stable-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-temple" class="modal-overlay hide" onclick="if(event.target===this) closeTemple()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>⛪ ВЕЛИКАЯ СЕПТА</h3><button class="close-btn" onclick="closeTemple()">✕</button></div>
-            <div id="modal-temple-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-port" class="modal-overlay hide" onclick="if(event.target===this) closePort()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>⛵ ПОРТ</h3><button class="close-btn" onclick="closePort()">✕</button></div>
-            <div id="modal-port-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-jail" class="modal-overlay hide" onclick="if(event.target===this) closeJail()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>⛓️ ТЮРЬМА</h3><button class="close-btn" onclick="closeJail()">✕</button></div>
-            <div id="modal-jail-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-market" class="modal-overlay hide" onclick="if(event.target===this) closeMarket()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>🏪 РЫНОК</h3><button class="close-btn" onclick="closeMarket()">✕</button></div>
-            <div id="modal-market-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-stall" class="modal-overlay hide" onclick="if(event.target===this) closeStall()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>🏪 ЛАВКА</h3><button class="close-btn" onclick="closeStall()">✕</button></div>
-            <div id="modal-stall-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-library" class="modal-overlay hide" onclick="if(event.target===this) closeLibrary()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>📚 БИБЛИОТЕКА</h3><button class="close-btn" onclick="closeLibrary()">✕</button></div>
-            <div id="modal-library-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-guildhall" class="modal-overlay hide" onclick="if(event.target===this) closeGuildHall()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>🗡️ ГИЛЬДИЯ НАЁМНИКОВ</h3><button class="close-btn" onclick="closeGuildHall()">✕</button></div>
-            <div id="modal-guildhall-content"></div>
-        </div>
-    </div>
-
-    <div id="modal-brothel" class="modal-overlay hide" onclick="if(event.target===this) closeBrothel()">
-        <div class="modal-box">
-            <div class="modal-header"><h3>💃 БОРДЕЛЬ</h3><button class="close-btn" onclick="closeBrothel()">✕</button></div>
-            <div id="modal-brothel-content"></div>
-        </div>
-    </div>
-
-    <!-- ========================================================== -->
-    <!-- ПОДКЛЮЧЕНИЕ main.js (ЕДИНСТВЕННЫЙ ФАЙЛ)                   -->
-    <!-- ========================================================== -->
-    <script type="module" src="js/main.js"></script>
+        const savedUser = localStorage.getItem('got_user');
+        if (savedUser && users[savedUser]) {
+            currentUser = savedUser;
+            enterGame(savedUser);
+        } else {
+            showPage('login');
+        }
+    </script>
 </body>
 </html>
