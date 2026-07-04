@@ -8,7 +8,7 @@ import { showPage, setMessage, hash, addLog } from './core/utils.js';
 import { NATIONALITIES } from './core/config.js';
 
 // ============================================================
-// ДЕЛАЕМ ФУНКЦИИ ГЛОБАЛЬНЫМИ
+// ДЕЛАЕМ ФУНКЦИИ ГЛОБАЛЬНЫМИ ДЛЯ onclick
 // ============================================================
 window.showPage = showPage;
 window.setMessage = setMessage;
@@ -18,7 +18,7 @@ window.addLog = addLog;
 // ============================================================
 // РЕГИСТРАЦИЯ
 // ============================================================
-window.handleRegister = function() {
+function handleRegister() {
     const name = document.getElementById('reg-name').value.trim();
     const password = document.getElementById('reg-password').value;
     const nationality = document.getElementById('reg-nationality').value;
@@ -83,12 +83,13 @@ window.handleRegister = function() {
     
     localStorage.setItem('got_user', name);
     setTimeout(() => enterGame(name), 1200);
-};
+}
+window.handleRegister = handleRegister;
 
 // ============================================================
 // ВХОД
 // ============================================================
-window.handleLogin = function() {
+function handleLogin() {
     const name = document.getElementById('login-name').value.trim();
     const password = document.getElementById('login-password').value;
     const errEl = document.getElementById('login-error');
@@ -110,7 +111,8 @@ window.handleLogin = function() {
     localStorage.setItem('got_user', name);
     addLog('👤 ' + name + ' вошёл в игру');
     enterGame(name);
-};
+}
+window.handleLogin = handleLogin;
 
 // ============================================================
 // ВХОД В ИГРУ
@@ -118,7 +120,7 @@ window.handleLogin = function() {
 function enterGame(name) {
     const user = users[name];
     if (!user) return;
-    
+    currentUser = name;
     showPage('game');
     updateUI();
     setMessage('Добро пожаловать, ' + name + '!');
@@ -146,7 +148,7 @@ function updateUI() {
 // ============================================================
 // ДЕЙСТВИЯ
 // ============================================================
-window.eat = function() {
+function eat() {
     const user = users[currentUser];
     if (!user) return;
     const g = user.game;
@@ -158,9 +160,10 @@ window.eat = function() {
     setMessage('🍞 Вы поели! Еда +25.');
     updateUI();
     saveData();
-};
+}
+window.eat = eat;
 
-window.rest = function() {
+function rest() {
     const user = users[currentUser];
     if (!user) return;
     const g = user.game;
@@ -174,42 +177,49 @@ window.rest = function() {
     setMessage('🛏️ Вы отдохнули! Усталость +30, HP +15.');
     updateUI();
     saveData();
-};
+}
+window.rest = rest;
 
-window.talk = function() {
+function talk() {
     const msgs = [
         '🍺 Трактирщик: "Добро пожаловать, путник!"',
         '🍺 Трактирщик: "Хочешь заработать? Помой посуду."',
         '🍺 Трактирщик: "Будь осторожен за воротами."'
     ];
     setMessage(msgs[Math.floor(Math.random() * msgs.length)]);
-};
+}
+window.talk = talk;
 
 // ============================================================
 // ЗАГЛУШКИ ДЛЯ КНОПОК МЕНЮ
 // ============================================================
-window.openCharacter = function() {
+function openCharacter() {
     setMessage('👤 Персонаж (информация)');
-};
+}
+window.openCharacter = openCharacter;
 
-window.openInventory = function() {
+function openInventory() {
     setMessage('🎒 Инвентарь (пока пустой)');
-};
+}
+window.openInventory = openInventory;
 
-window.openMap = function() {
+function openMap() {
     setMessage('🗺️ Карта (в разработке)');
-};
+}
+window.openMap = openMap;
 
 // ============================================================
 // ВЫХОД
 // ============================================================
-window.handleLogout = function() {
+function handleLogout() {
     localStorage.removeItem('got_user');
+    currentUser = null;
     showPage('login');
     document.getElementById('login-name').value = '';
     document.getElementById('login-password').value = '';
     setMessage('');
-};
+}
+window.handleLogout = handleLogout;
 
 // ============================================================
 // ЗАПУСК
