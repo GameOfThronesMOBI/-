@@ -10,15 +10,14 @@
 <div id="app">
     <div class="header"><h1>🐺 ИГРА ПРЕСТОЛОВ</h1><h2>MOBI</h2></div>
     
-    <!-- СТРАНИЦЫ -->
     <div id="page-login">
         <div class="page-title">ВХОД</div>
         <div id="login-error" class="msg-error hide"></div>
         <div class="form-group"><label>Имя персонажа</label><input type="text" id="login-name" placeholder="Введите имя"></div>
         <div class="form-group"><label>Пароль</label><input type="password" id="login-password" placeholder="Введите пароль"></div>
-        <button class="btn btn-primary" onclick="handleLogin()">⚔️ ВОЙТИ</button>
+        <button class="btn btn-primary" id="btn-login">⚔️ ВОЙТИ</button>
         <div class="divider">— ИЛИ —</div>
-        <button class="btn btn-secondary" onclick="showPage('register')">📜 СОЗДАТЬ ПЕРСОНАЖА</button>
+        <button class="btn btn-secondary" id="btn-to-register">📜 СОЗДАТЬ ПЕРСОНАЖА</button>
     </div>
     
     <div id="page-register" class="hide">
@@ -30,45 +29,45 @@
             <div class="form-group"><label>Пароль</label><input type="password" id="reg-password" placeholder="Придумайте пароль"><small>Минимум 4 символа</small></div>
             <div class="form-group"><label>Национальность</label><select id="reg-nationality"><option value="">▼ Выберите</option><option value="Северные земли">❄️ Северные земли</option><option value="Речные земли">🌊 Речные земли</option><option value="Долина">🏔️ Долина</option><option value="Западные земли">💰 Западные земли</option><option value="Простор">🌾 Простор</option><option value="Штормовые земли">⛈️ Штормовые земли</option><option value="Дорн">☀️ Дорн</option></select></div>
             <div class="form-group"><label>Секретное слово</label><input type="text" id="reg-secret" placeholder="Для восстановления пароля"></div>
-            <button class="btn btn-primary" onclick="handleRegister()">🔥 ЗАРЕГИСТРИРОВАТЬСЯ</button>
+            <button class="btn btn-primary" id="btn-register">🔥 ЗАРЕГИСТРИРОВАТЬСЯ</button>
             <div class="divider">—</div>
-            <button class="btn btn-secondary" onclick="showPage('login')">Уже есть персонаж? Войти →</button>
+            <button class="btn btn-secondary" id="btn-to-login">Уже есть персонаж? Войти →</button>
         </div>
     </div>
     
     <div id="page-game" class="hide">
-        <div class="online-bar" onclick="showOnlineList()"><span>👥 <span id="online-global">0</span> игроков</span><span>📍 <span id="online-region">0</span></span><span>🏙️ <span id="online-location">0</span></span><span class="online-click">📋 список</span></div>
+        <div class="online-bar"><span>👥 <span id="online-global">0</span> игроков</span><span>📍 <span id="online-region">0</span></span><span>🏙️ <span id="online-location">0</span></span><span class="online-click" id="btn-online-list">📋 список</span></div>
         <div id="menu-bar">
             <div class="menu-top"><div class="menu-time">🕐 <span id="menu-time">--:--</span> МСК | <span id="menu-period">🌤️ День</span></div><div class="menu-location">🏠 <span id="menu-location">Таверна</span> <span id="menu-location-level" style="color:#6a5a48;font-size:11px;"></span></div></div>
             <div class="menu-stats"><div class="menu-hp">❤️ <span id="menu-hp">60</span>/<span id="menu-hp-max">60</span></div><div class="menu-level">📈 Уровень: <span id="menu-level">1</span></div><div class="menu-money">🪙 <span id="menu-gold">0</span> | ⚪ <span id="menu-silver">0</span> | 🟤 <span id="menu-copper">0</span></div></div>
             <div class="menu-resources"><div class="menu-food">🍖 <span id="menu-food">100</span>/100</div><div class="menu-thirst">💧 <span id="menu-thirst">100</span>/100</div><div class="menu-fatigue">😴 <span id="menu-fatigue">100</span>/100</div></div>
             <div class="menu-actions">
-                <button class="menu-btn" onclick="openCharacter()">👤</button><button class="menu-btn" onclick="openInventory()">🎒</button><button class="menu-btn" onclick="openMap()">🗺️</button><button class="menu-btn" onclick="openLog()">📜</button><button class="menu-btn" onclick="openMainMenu()">📋</button>
+                <button class="menu-btn" id="btn-character">👤</button><button class="menu-btn" id="btn-inventory">🎒</button><button class="menu-btn" id="btn-map">🗺️</button><button class="menu-btn" id="btn-log">📜</button><button class="menu-btn" id="btn-menu">📋</button>
             </div>
         </div>
         <div id="busy-status" class="status-busy hide">⏳ Вы заняты...</div>
         <div class="story-box" id="story-box"><h4 id="story-title">📍 Таверна</h4><p id="story-text">Добро пожаловать в таверну.</p><div class="action-group"><p>⚡ Что делаете?</p><div id="actions-container"></div><div id="game-message" class="game-msg"></div></div></div>
-        <button class="btn btn-danger" onclick="handleLogout()">🚪 Выйти из игры</button>
+        <button class="btn btn-danger" id="btn-logout">🚪 Выйти из игры</button>
     </div>
     <div class="footer">❄️ ЗИМА БЛИЗКО</div>
 </div>
 
-<!-- МОДАЛЬНЫЕ ОКНА -->
-<div id="modal-character" class="modal-overlay hide" onclick="if(event.target===this) closeCharacter()"><div class="modal-box"><div class="modal-header"><h3>👤 ПЕРСОНАЖ</h3><button class="close-btn" onclick="closeCharacter()">✕</button></div><div id="modal-content"></div></div></div>
-<div id="modal-inventory" class="modal-overlay hide" onclick="if(event.target===this) closeInventory()"><div class="modal-box"><div class="modal-header"><h3>🎒 ИНВЕНТАРЬ</h3><button class="close-btn" onclick="closeInventory()">✕</button></div><div id="modal-inventory-content"></div></div></div>
-<div id="modal-map" class="modal-overlay hide" onclick="if(event.target===this) closeMap()"><div class="modal-box"><div class="modal-header"><h3>🗺️ ПЕРЕМЕЩЕНИЕ</h3><button class="close-btn" onclick="closeMap()">✕</button></div><div id="modal-map-content"></div></div></div>
-<div id="modal-houses" class="modal-overlay hide" onclick="if(event.target===this) closeHouses()"><div class="modal-box"><div class="modal-header"><h3>🏘️ ДОМА</h3><button class="close-btn" onclick="closeHouses()">✕</button></div><div id="modal-houses-content"></div></div></div>
-<div id="modal-online" class="modal-overlay hide" onclick="if(event.target===this) closeOnline()"><div class="modal-box"><div class="modal-header"><h3>👥 ОНЛАЙН</h3><button class="close-btn" onclick="closeOnline()">✕</button></div><div id="modal-online-content"></div></div></div>
-<div id="modal-menu" class="modal-overlay hide" onclick="if(event.target===this) closeMenu()"><div class="modal-box"><div class="modal-header"><h3>📋 МЕНЮ</h3><button class="close-btn" onclick="closeMenu()">✕</button></div><div id="modal-menu-content"></div></div></div>
-<div id="modal-trade" class="modal-overlay hide" onclick="if(event.target===this) closeTrade()"><div class="modal-box"><div class="modal-header"><h3>🛒 ТОРГОВЛЯ</h3><button class="close-btn" onclick="closeTrade()">✕</button></div><div id="modal-trade-content"></div></div></div>
-<div id="modal-guild" class="modal-overlay hide" onclick="if(event.target===this) closeGuild()"><div class="modal-box"><div class="modal-header"><h3>🏛️ ГИЛЬДИЯ ТОРГОВЦЕВ</h3><button class="close-btn" onclick="closeGuild()">✕</button></div><div id="modal-guild-content"></div></div></div>
-<div id="modal-log" class="modal-overlay hide" onclick="if(event.target===this) closeLog()"><div class="modal-box"><div class="modal-header"><h3>📜 ЛОГ СОБЫТИЙ</h3><button class="close-btn" onclick="closeLog()">✕</button></div><div id="modal-log-content"></div></div></div>
+<!-- Модальные окна -->
+<div id="modal-character" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>👤 ПЕРСОНАЖ</h3><button class="close-btn" id="close-character">✕</button></div><div id="modal-content"></div></div></div>
+<div id="modal-inventory" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🎒 ИНВЕНТАРЬ</h3><button class="close-btn" id="close-inventory">✕</button></div><div id="modal-inventory-content"></div></div></div>
+<div id="modal-map" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🗺️ ПЕРЕМЕЩЕНИЕ</h3><button class="close-btn" id="close-map">✕</button></div><div id="modal-map-content"></div></div></div>
+<div id="modal-houses" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🏘️ ДОМА</h3><button class="close-btn" id="close-houses-btn">✕</button></div><div id="modal-houses-content"></div></div></div>
+<div id="modal-online" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>👥 ОНЛАЙН</h3><button class="close-btn" id="close-online">✕</button></div><div id="modal-online-content"></div></div></div>
+<div id="modal-menu" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>📋 МЕНЮ</h3><button class="close-btn" id="close-menu-btn">✕</button></div><div id="modal-menu-content"></div></div></div>
+<div id="modal-trade" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🛒 ТОРГОВЛЯ</h3><button class="close-btn" id="close-trade">✕</button></div><div id="modal-trade-content"></div></div></div>
+<div id="modal-guild" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🏛️ ГИЛЬДИЯ ТОРГОВЦЕВ</h3><button class="close-btn" id="close-guild">✕</button></div><div id="modal-guild-content"></div></div></div>
+<div id="modal-log" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>📜 ЛОГ СОБЫТИЙ</h3><button class="close-btn" id="close-log">✕</button></div><div id="modal-log-content"></div></div></div>
 
-<!-- Подключаем JS -->
+<!-- Скрипты -->
 <script src="js/core/config.js"></script>
 <script src="js/core/state.js"></script>
 <script src="js/core/utils.js"></script>
 <script src="js/core/storage.js"></script>
-<script src="js/game/main.js"></script>
+<script src="js/main.js"></script>
 </body>
-                                                                                                                                                                                                                                                                                              </html>
+</html>
