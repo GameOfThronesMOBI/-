@@ -4,13 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>🐺 ИГРА ПРЕСТОЛОВ: MOBI</title>
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ========================================================== */
+        /* ВЕСЬ ТВОЙ CSS (style.css)                                  */
+        /* ========================================================== */
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { background:#0d0a08; font-family:'Georgia',serif; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:10px; }
+        #app { max-width:500px; width:100%; background:#1f1712; border:1px solid #3d3026; border-radius:20px; padding:16px 14px; box-shadow:0 20px 50px rgba(0,0,0,0.9); }
+        .header { text-align:center; border-bottom:1px solid #3d3026; padding-bottom:10px; margin-bottom:12px; }
+        .header h1 { color:#c9b694; font-size:20px; font-weight:400; letter-spacing:4px; }
+        .header h2 { color:#6a5a48; font-size:11px; font-weight:400; letter-spacing:6px; }
+        .page-title { color:#c9b694; text-align:center; font-size:17px; margin-bottom:14px; }
+        .form-group { margin-bottom:12px; }
+        label { display:block; color:#a08d78; font-size:13px; margin-bottom:4px; }
+        input, select { width:100%; padding:12px 14px; background:#120e0b; border:1px solid #3d3026; border-radius:10px; color:#d4c5b0; font-size:15px; font-family:'Georgia',serif; }
+        input:focus, select:focus { outline:none; border-color:#8a7a5a; }
+        select { background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236a5a48' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat:no-repeat; background-position:right 14px center; background-size:18px; }
+        select option { background:#1f1712; color:#d4c5b0; }
+        small { display:block; color:#5a4a3a; font-size:11px; margin-top:3px; }
+        .btn { width:100%; padding:12px 14px; border:1px solid #3d3026; border-radius:10px; font-family:'Georgia',serif; font-size:14px; cursor:pointer; text-align:center; margin-top:6px; background:#2a201a; color:#c9b694; transition:0.2s; }
+        .btn:active { background:#3d3026; transform:scale(0.98); }
+        .btn-primary { background:#3d2e20; color:#c9b694; }
+        .btn-secondary { background:transparent; color:#6a5a48; border-color:#2a201a; }
+        .btn-danger { background:#2a1a12; color:#6a5a48; border-color:#2a201a; }
+        .btn-small { display:inline-block; width:auto; padding:4px 12px; margin:0; font-size:12px; }
+        .btn-game { background:#2a201a; border:1px solid #3d3026; color:#c9b694; padding:11px 14px; border-radius:10px; font-size:14px; cursor:pointer; width:100%; text-align:left; margin-top:5px; }
+        .btn-game:active { background:#3d3026; }
+        .btn-game:disabled { opacity:0.4; pointer-events:none; }
+        .divider { text-align:center; color:#3d3026; padding:12px 0; font-size:13px; letter-spacing:3px; }
+        .msg-error { background:#2a1210; border:1px solid #4a2a20; color:#c96a5a; padding:10px 14px; border-radius:10px; margin-bottom:14px; text-align:center; }
+        .msg-success { background:#122a1a; border:1px solid #2a4a2a; color:#7ac98a; padding:14px; border-radius:10px; margin-bottom:14px; text-align:center; }
+        .hide { display:none !important; }
+        #menu-bar { background:#120e0b; border:1px solid #2a201a; border-radius:12px; padding:10px 12px; margin-bottom:12px; font-size:13px; line-height:1.5; color:#b8a890; }
+        .menu-top { display:flex; justify-content:space-between; border-bottom:1px solid #1a1410; padding-bottom:4px; margin-bottom:4px; }
+        .menu-stats { display:flex; justify-content:space-between; flex-wrap:wrap; padding:2px 0; }
+        .menu-resources { display:flex; justify-content:space-between; padding:2px 0; border-top:1px solid #1a1410; margin-top:4px; padding-top:4px; }
+        .menu-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; padding-top:6px; border-top:1px solid #1a1410; }
+        .menu-btn { flex:1; min-width:55px; padding:6px; background:#2a201a; border:1px solid #3d3026; border-radius:8px; color:#c9b694; font-family:'Georgia',serif; font-size:11px; cursor:pointer; text-align:center; }
+        .menu-btn:active { background:#3d3026; transform:scale(0.96); }
+        .story-box { background:#120e0b; border:1px solid #2a201a; border-radius:12px; padding:14px; margin-bottom:12px; min-height:100px; }
+        .story-box h4 { color:#6a5a48; font-size:15px; font-weight:400; margin-bottom:6px; }
+        .story-box p { color:#b8a890; font-size:14px; line-height:1.7; white-space:pre-line; }
+        .story-box .game-msg { color:#6a5a48; font-style:italic; margin-top:10px; padding-top:8px; border-top:1px solid #1f1712; font-size:13px; min-height:20px; }
+        .action-group { margin-top:10px; padding-top:10px; border-top:1px solid #1f1712; }
+        .action-group p { color:#6a5a48; font-size:13px; margin-bottom:6px; letter-spacing:1px; }
+        .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:flex; justify-content:center; align-items:center; z-index:1000; padding:15px; }
+        .modal-overlay.hide { display:none; }
+        .modal-box { background:#1f1712; border:1px solid #3d3026; border-radius:16px; padding:20px 18px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; }
+        .modal-box .modal-header { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #3d3026; padding-bottom:10px; margin-bottom:14px; }
+        .modal-box .modal-header h3 { color:#c9b694; font-size:18px; font-weight:400; letter-spacing:2px; }
+        .modal-box .modal-header .close-btn { background:none; border:none; color:#6a5a48; font-size:24px; cursor:pointer; padding:0 8px; }
+        .modal-section { margin-bottom:14px; }
+        .modal-section h4 { color:#6a5a48; font-size:14px; font-weight:400; letter-spacing:1px; border-bottom:1px solid #2a201a; padding-bottom:4px; margin-bottom:8px; }
+        .modal-section .row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; font-size:13px; color:#b8a890; border-bottom:1px solid #1a1410; gap:8px; }
+        .modal-section .row:last-child { border-bottom:none; }
+        .modal-section .row .label { color:#7a6a58; flex:1; }
+        .modal-section .row .value { color:#c9b694; text-align:right; white-space:nowrap; }
+        .status-busy { color:#c96a5a; font-size:13px; text-align:center; padding:6px; background:#1a0e0a; border-radius:8px; margin-bottom:8px; }
+        .status-busy.hide { display:none; }
+        .footer { text-align:center; color:#2a201a; font-size:10px; margin-top:14px; padding-top:10px; border-top:1px solid #1f1712; letter-spacing:3px; }
+        .online-bar { background:#120e0b; border:1px solid #2a201a; border-radius:10px; padding:8px 12px; margin-bottom:10px; font-size:12px; color:#7a6a58; display:flex; justify-content:space-between; flex-wrap:wrap; }
+        .online-bar span { color:#c9b694; }
+        .online-bar .online-click { cursor:pointer; color:#8a7a5a; }
+    </style>
 </head>
 <body>
     <div id="app">
         <div class="header"><h1>🐺 ИГРА ПРЕСТОЛОВ</h1><h2>MOBI</h2></div>
-
-        <!-- СТРАНИЦА ВХОДА -->
         <div id="page-login">
             <div class="page-title">ВХОД</div>
             <div id="login-error" class="msg-error hide"></div>
@@ -20,8 +80,6 @@
             <div class="divider">— ИЛИ —</div>
             <button class="btn btn-secondary" onclick="showPage('register')">📜 СОЗДАТЬ ПЕРСОНАЖА</button>
         </div>
-
-        <!-- СТРАНИЦА РЕГИСТРАЦИИ -->
         <div id="page-register" class="hide">
             <div class="page-title">СОЗДАНИЕ ПЕРСОНАЖА</div>
             <div id="register-error" class="msg-error hide"></div>
@@ -47,8 +105,6 @@
                 <button class="btn btn-secondary" onclick="showPage('login')">Уже есть персонаж? Войти →</button>
             </div>
         </div>
-
-        <!-- СТРАНИЦА ИГРЫ -->
         <div id="page-game" class="hide">
             <div id="menu-bar">
                 <div class="menu-top">
@@ -90,6 +146,237 @@
         <div class="footer">❄️ ЗИМА БЛИЗКО</div>
     </div>
 
-    <script src="js/main.js"></script>
+    <div id="modal-character" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>👤 ПЕРСОНАЖ</h3><button class="close-btn">✕</button></div><div id="modal-content"></div></div></div>
+    <div id="modal-inventory" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🎒 ИНВЕНТАРЬ</h3><button class="close-btn">✕</button></div><div id="modal-inventory-content"></div></div></div>
+    <div id="modal-map" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🗺️ ПЕРЕМЕЩЕНИЕ</h3><button class="close-btn">✕</button></div><div id="modal-map-content"></div></div></div>
+
+    <script>
+        // ============================================================
+        // ВСЯ ЛОГИКА (РЕГИСТРАЦИЯ, ВХОД, ИГРА) - РАБОЧАЯ ВЕРСИЯ
+        // ============================================================
+
+        // --- БАЗА ДАННЫХ ---
+        let users = {};
+        let currentUser = null;
+
+        // --- ЗАГРУЗКА/СОХРАНЕНИЕ ---
+        function loadUsers() {
+            try {
+                const saved = localStorage.getItem('got_users');
+                if (saved) users = JSON.parse(saved);
+            } catch(e) { users = {}; }
+        }
+        function saveUsers() {
+            localStorage.setItem('got_users', JSON.stringify(users));
+        }
+
+        // --- ХЕШ ПАРОЛЯ ---
+        function hash(str) {
+            let h = 0;
+            for (let i = 0; i < str.length; i++) {
+                h = ((h << 5) - h) + str.charCodeAt(i);
+                h = h & h;
+            }
+            return h.toString(36);
+        }
+
+        // --- ГЛАВНАЯ ФУНКЦИЯ ПЕРЕКЛЮЧЕНИЯ СТРАНИЦ (ДЛЯ onclick) ---
+        window.showPage = function(page) {
+            document.getElementById('page-login').classList.add('hide');
+            document.getElementById('page-register').classList.add('hide');
+            document.getElementById('page-game').classList.add('hide');
+            if (page === 'login') document.getElementById('page-login').classList.remove('hide');
+            else if (page === 'register') document.getElementById('page-register').classList.remove('hide');
+            else if (page === 'game') document.getElementById('page-game').classList.remove('hide');
+        };
+
+        // --- СООБЩЕНИЯ ---
+        function setMessage(msg) {
+            const el = document.getElementById('game-message');
+            if (el) el.textContent = msg || '';
+        }
+
+        // --- РЕГИСТРАЦИЯ ---
+        window.handleRegister = function() {
+            const name = document.getElementById('reg-name').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const nationality = document.getElementById('reg-nationality').value;
+            const secret = document.getElementById('reg-secret').value.trim();
+            const errEl = document.getElementById('register-error');
+            const okEl = document.getElementById('register-success');
+            const formEl = document.getElementById('register-form');
+
+            errEl.classList.add('hide');
+            okEl.classList.add('hide');
+            formEl.classList.remove('hide');
+
+            if (!name || !password || !nationality || !secret) {
+                errEl.textContent = '❌ Заполните все поля!';
+                errEl.classList.remove('hide');
+                return;
+            }
+            if (name.length < 2) {
+                errEl.textContent = '❌ Имя минимум 2 символа!';
+                errEl.classList.remove('hide');
+                return;
+            }
+            if (password.length < 4) {
+                errEl.textContent = '❌ Пароль минимум 4 символа!';
+                errEl.classList.remove('hide');
+                return;
+            }
+            if (users[name]) {
+                errEl.textContent = '❌ Это имя уже занято!';
+                errEl.classList.remove('hide');
+                return;
+            }
+
+            users[name] = {
+                password: hash(password),
+                nationality: nationality,
+                secret: hash(secret),
+                game: {
+                    gold: 100,
+                    hp: 60,
+                    maxHp: 60,
+                    level: 1,
+                    food: 100,
+                    thirst: 100,
+                    fatigue: 100
+                }
+            };
+
+            saveUsers();
+            formEl.classList.add('hide');
+            okEl.innerHTML = '✅ Поздравляем, <strong>' + name + '</strong>!<br>Вы — ' + nationality;
+            okEl.classList.remove('hide');
+
+            localStorage.setItem('got_user', name);
+            setTimeout(() => {
+                currentUser = name;
+                enterGame();
+            }, 1500);
+        };
+
+        // --- ВХОД ---
+        window.handleLogin = function() {
+            const name = document.getElementById('login-name').value.trim();
+            const password = document.getElementById('login-password').value;
+            const errEl = document.getElementById('login-error');
+            errEl.classList.add('hide');
+
+            if (!name || !password) {
+                errEl.textContent = '❌ Заполните все поля!';
+                errEl.classList.remove('hide');
+                return;
+            }
+
+            const user = users[name];
+            if (!user) {
+                errEl.textContent = '❌ Персонаж не найден!';
+                errEl.classList.remove('hide');
+                return;
+            }
+            if (user.password !== hash(password)) {
+                errEl.textContent = '❌ Неверный пароль!';
+                errEl.classList.remove('hide');
+                return;
+            }
+
+            localStorage.setItem('got_user', name);
+            currentUser = name;
+            enterGame();
+        };
+
+        // --- ВХОД В ИГРУ ---
+        function enterGame() {
+            const user = users[currentUser];
+            if (!user) return;
+            window.showPage('game');
+            updateUI();
+            setMessage('Добро пожаловать, ' + currentUser + '!');
+        }
+
+        // --- ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ---
+        function updateUI() {
+            const user = users[currentUser];
+            if (!user) return;
+            const g = user.game;
+            document.getElementById('menu-hp').textContent = g.hp;
+            document.getElementById('menu-hp-max').textContent = g.maxHp;
+            document.getElementById('menu-level').textContent = g.level;
+            document.getElementById('menu-gold').textContent = g.gold;
+            document.getElementById('menu-food').textContent = g.food;
+            document.getElementById('menu-thirst').textContent = g.thirst;
+            document.getElementById('menu-fatigue').textContent = g.fatigue;
+            document.getElementById('menu-location').textContent = 'Таверна';
+        }
+
+        // --- ДЕЙСТВИЯ В ИГРЕ ---
+        window.eat = function() {
+            const user = users[currentUser];
+            if (!user) return;
+            const g = user.game;
+            if (g.food >= 100) {
+                setMessage('🍖 Вы сыты!');
+                return;
+            }
+            g.food = Math.min(100, g.food + 25);
+            setMessage('🍞 Вы поели! Еда +25.');
+            updateUI();
+            saveUsers();
+        };
+
+        window.rest = function() {
+            const user = users[currentUser];
+            if (!user) return;
+            const g = user.game;
+            if (g.gold < 10) {
+                setMessage('❌ Нужно 10 золота для отдыха!');
+                return;
+            }
+            g.gold -= 10;
+            g.fatigue = Math.min(100, g.fatigue + 30);
+            g.hp = Math.min(g.maxHp, g.hp + 15);
+            setMessage('🛏️ Вы отдохнули! Усталость +30, HP +15.');
+            updateUI();
+            saveUsers();
+        };
+
+        window.talk = function() {
+            const msgs = [
+                '🍺 Трактирщик: "Добро пожаловать, путник!"',
+                '🍺 Трактирщик: "Хочешь заработать? Помой посуду."',
+                '🍺 Трактирщик: "Будь осторожен за воротами."'
+            ];
+            setMessage(msgs[Math.floor(Math.random() * msgs.length)]);
+        };
+
+        // --- ЗАГЛУШКИ ДЛЯ КНОПОК МЕНЮ ---
+        window.openCharacter = function() { setMessage('👤 Персонаж (информация)'); };
+        window.openInventory = function() { setMessage('🎒 Инвентарь (пока пустой)'); };
+        window.openMap = function() { setMessage('🗺️ Карта (в разработке)'); };
+
+        // --- ВЫХОД ИЗ ИГРЫ ---
+        window.handleLogout = function() {
+            localStorage.removeItem('got_user');
+            currentUser = null;
+            window.showPage('login');
+            document.getElementById('login-name').value = '';
+            document.getElementById('login-password').value = '';
+            setMessage('');
+        };
+
+        // --- ЗАПУСК ПРИ ЗАГРУЗКЕ СТРАНИЦЫ ---
+        loadUsers();
+        const savedUser = localStorage.getItem('got_user');
+        if (savedUser && users[savedUser]) {
+            currentUser = savedUser;
+            enterGame();
+        } else {
+            window.showPage('login');
+        }
+        console.log('✅ Игра загружена! Пользователей:', Object.keys(users).length);
+    </script>
 </body>
 </html>
