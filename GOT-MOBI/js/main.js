@@ -1,4 +1,41 @@
 // ============================================================
+// ПРИВЯЗКА СОБЫТИЙ
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    
+    document.getElementById('btn-login').addEventListener('click', handleLogin);
+    document.getElementById('btn-to-register').addEventListener('click', function() { showPage('register'); });
+    
+    document.getElementById('btn-register').addEventListener('click', handleRegister);
+    document.getElementById('btn-to-login').addEventListener('click', function() { showPage('login'); });
+    
+    document.getElementById('btn-logout').addEventListener('click', handleLogout);
+    document.getElementById('btn-character').addEventListener('click', openCharacter);
+    document.getElementById('btn-inventory').addEventListener('click', openInventory);
+    document.getElementById('btn-map').addEventListener('click', openMap);
+    document.getElementById('btn-log').addEventListener('click', openLog);
+    document.getElementById('btn-menu').addEventListener('click', openMainMenu);
+    document.getElementById('btn-online-list').addEventListener('click', showOnlineList);
+    
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.add('hide');
+        });
+    });
+    
+    document.getElementById('close-character').addEventListener('click', function() { document.getElementById('modal-character').classList.add('hide'); });
+    document.getElementById('close-inventory').addEventListener('click', function() { document.getElementById('modal-inventory').classList.add('hide'); });
+    document.getElementById('close-map').addEventListener('click', closeMap);
+    document.getElementById('close-houses-btn').addEventListener('click', closeHouses);
+    document.getElementById('close-online').addEventListener('click', closeOnline);
+    document.getElementById('close-menu-btn').addEventListener('click', closeMenu);
+    document.getElementById('close-trade').addEventListener('click', function() { document.getElementById('modal-trade').classList.add('hide'); });
+    document.getElementById('close-guild').addEventListener('click', function() { document.getElementById('modal-guild').classList.add('hide'); });
+    document.getElementById('close-log').addEventListener('click', closeLog);
+    
+});
+
+// ============================================================
 // ЯДРО ИГРЫ
 // ============================================================
 
@@ -437,14 +474,14 @@ function updateStory() {
     
     const texts = {
         'Таверна': 'Добро пожаловать в таверну. Здесь можно поесть, поработать и поговорить с трактирщиком.',
-        'Рынок': '🏪 Центральный рынок Королевской Гавани. Здесь можно торговать с другими игроками.',
+        'Рынок': '🏪 Центральный рынок Королевской Гавани.',
         'Кузница': 'Вы в кузнице. Здесь можно купить ресурсы и скрафтить предметы.',
-        'Оружейная лавка': 'Вы в оружейной лавке. Здесь можно купить и продать оружие.',
-        'Кожевник': 'Вы у кожевника. Здесь можно купить и продать кожаную броню.',
-        'Бронник': 'Вы у бронника. Здесь можно купить и продать латную броню.',
-        'Плотник': 'Вы у плотника. Здесь можно купить и продать луки и арбалеты.',
+        'Оружейная лавка': 'Вы в оружейной лавке.',
+        'Кожевник': 'Вы у кожевника.',
+        'Бронник': 'Вы у бронника.',
+        'Плотник': 'Вы у плотника.',
         'Конюшня': '🐴 Королевская конюшня.',
-        'Гильдия торговцев': 'Вы в гильдии торговцев. Здесь можно торговать на аукционе.',
+        'Гильдия торговцев': 'Вы в гильдии торговцев.',
         'Магистрат': '📜 Магистрат — центр управления городом.',
         'Ворота': 'Вы у городских ворот.',
         'Королевский квартал': '👑 Элитный район.',
@@ -555,10 +592,7 @@ function gameAction(action) {
         case 'open_temple': openTemple(); break;
         case 'open_port': openPort(); break;
         case 'open_market': openMarket(); break;
-        case 'open_magistrate':
-            if (typeof openMagistrate === 'function') openMagistrate();
-            else setMessage('❌ Магистрат временно недоступен.');
-            break;
+        case 'open_magistrate': openMagistrate(); break;
         case 'enter_city':
             g.location.place = 'Ворота';
             g.location.location = 'Королевская Гавань';
@@ -597,7 +631,7 @@ function gameAction(action) {
             });
             break;
         case 'rest':
-            if (!spendMoney(g, 10)) { setMessage('❌ Недостаточно денег для отдыха (10 МП).'); return; }
+            if (!spendMoney(g, 10)) { setMessage('❌ Недостаточно денег (10 МП).'); return; }
             g.fatigue = Math.min(100, g.fatigue + 30);
             g.hp = Math.min(g.maxHp, g.hp + 15);
             setMessage('🛏️ Вы отдохнули. Усталость +30, HP +15.');
@@ -627,7 +661,6 @@ function gameAction(action) {
         case 'open_library': openLibrary(); break;
         case 'open_guildhall': openGuildHall(); break;
         case 'open_brothel': openBrothel(); break;
-        case 'open_log': openLog(); break;
     }
 }
 
@@ -810,8 +843,12 @@ function showHouseInfo(region, houseId) {
 function closeHouses() { document.getElementById('modal-houses').classList.add('hide'); }
 
 // ============================================================
-// ЗАГЛУШКИ (будут заменены позже)
+// ЗАГЛУШКИ
 // ============================================================
+function getMaxHp(g) { return 60 + (g.level - 1) * 10; }
+function checkRent() {}
+function checkStallRent() {}
+function getActiveDiceGames() { return []; }
 function openCharacter() { setMessage('👤 Персонаж — заглушка'); }
 function openInventory() { setMessage('🎒 Инвентарь — заглушка'); }
 function doSearch() { setMessage('🔍 Поиск — заглушка'); }
@@ -828,6 +865,7 @@ function openGuild() { setMessage('🏛️ Аукцион — заглушка')
 function openTavernTrade() { setMessage('🛒 Торговля в таверне — заглушка'); }
 function openMagistrate() { setMessage('📜 Магистрат — заглушка'); }
 function battleAction(action) { setMessage('⚔️ Бой — заглушка'); }
+function mobTurn() {}
 
 // ============================================================
 // ЗАПУСК
