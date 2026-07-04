@@ -1,9 +1,47 @@
 // ============================================================
-// ГЛАВНАЯ ЛОГИКА
+// ПРОСТАЯ ИГРА (ВСЯ ЛОГИКА В ОДНОМ ФАЙЛЕ)
 // ============================================================
 
-// --- ПОДКЛЮЧАЕМ core ---
-// (Всё уже лежит в глобальной области, потому что мы подключили все файлы в index.html)
+// --- БАЗА ДАННЫХ ---
+let users = {};
+let currentUser = null;
+
+// --- ЗАГРУЗКА/СОХРАНЕНИЕ ---
+function loadUsers() {
+    try {
+        const saved = localStorage.getItem('got_users');
+        if (saved) users = JSON.parse(saved);
+    } catch(e) { users = {}; }
+}
+
+function saveUsers() {
+    localStorage.setItem('got_users', JSON.stringify(users));
+}
+
+// --- ХЕШ ПАРОЛЯ ---
+function hash(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+        h = ((h << 5) - h) + str.charCodeAt(i);
+        h = h & h;
+    }
+    return h.toString(36);
+}
+
+// --- ФУНКЦИИ ДЛЯ HTML ---
+window.showPage = function(page) {
+    document.getElementById('page-login').classList.add('hide');
+    document.getElementById('page-register').classList.add('hide');
+    document.getElementById('page-game').classList.add('hide');
+    if (page === 'login') document.getElementById('page-login').classList.remove('hide');
+    else if (page === 'register') document.getElementById('page-register').classList.remove('hide');
+    else if (page === 'game') document.getElementById('page-game').classList.remove('hide');
+};
+
+function setMessage(msg) {
+    const el = document.getElementById('game-message');
+    if (el) el.textContent = msg || '';
+}
 
 // --- РЕГИСТРАЦИЯ ---
 window.handleRegister = function() {
@@ -101,18 +139,15 @@ window.handleLogin = function() {
 function enterGame() {
     const user = users[currentUser];
     if (!user) return;
-
     window.showPage('game');
     updateUI();
     setMessage('Добро пожаловать, ' + currentUser + '!');
 }
 
-// --- ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ---
 function updateUI() {
     const user = users[currentUser];
     if (!user) return;
     const g = user.game;
-
     document.getElementById('menu-hp').textContent = g.hp;
     document.getElementById('menu-hp-max').textContent = g.maxHp;
     document.getElementById('menu-level').textContent = g.level;
@@ -163,7 +198,7 @@ window.talk = function() {
     setMessage(msgs[Math.floor(Math.random() * msgs.length)]);
 };
 
-// --- ЗАГЛУШКИ ---
+// --- ЗАГЛУШКИ ДЛЯ МЕНЮ ---
 window.openCharacter = function() { setMessage('👤 Персонаж (информация)'); };
 window.openInventory = function() { setMessage('🎒 Инвентарь (пока пустой)'); };
 window.openMap = function() { setMessage('🗺️ Карта (в разработке)'); };
@@ -187,5 +222,4 @@ if (savedUser && users[savedUser]) {
 } else {
     window.showPage('login');
 }
-
 console.log('✅ Игра загружена! Пользователей:', Object.keys(users).length);
