@@ -47,6 +47,7 @@ function setMessage(msg) {
 
 // --- РЕГИСТРАЦИЯ ---
 window.handleRegister = function() {
+    console.log('📝 Регистрация вызвана');
     const name = document.getElementById('reg-name').value.trim();
     const password = document.getElementById('reg-password').value;
     const nationality = document.getElementById('reg-nationality').value;
@@ -109,6 +110,7 @@ window.handleRegister = function() {
 
 // --- ВХОД ---
 window.handleLogin = function() {
+    console.log('🔑 Вход вызван');
     const name = document.getElementById('login-name').value.trim();
     const password = document.getElementById('login-password').value;
     const errEl = document.getElementById('login-error');
@@ -145,6 +147,7 @@ function enterGame() {
     window.showPage('game');
     updateUI();
     setMessage('Добро пожаловать, ' + currentUser + '!');
+    console.log('🎮 Игра запущена для', currentUser);
 }
 
 // --- ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ---
@@ -216,6 +219,7 @@ window.handleLogout = function() {
     document.getElementById('login-name').value = '';
     document.getElementById('login-password').value = '';
     setMessage('');
+    console.log('🚪 Выход выполнен');
 };
 
 // --- ЗАПУСК ---
