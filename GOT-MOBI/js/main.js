@@ -1,23 +1,52 @@
 // ============================================================
-// main.js — РАБОТАЕТ С core/
+// main.js — ПОЛНАЯ ЛОГИКА (регистрация, вход, еда, отдых)
 // ============================================================
 
-import { users, currentUser } from './core/state.js';
-import { loadUsers, saveUsers } from './core/storage.js';
-import { showPage, setMessage, hash } from './core/utils.js';
-import { NATIONALITIES } from './core/config.js';
+// --- ПРОСТАЯ БАЗА ДАННЫХ ---
+let users = {};
+let currentUser = null;
 
-// ============================================================
-// ДЕЛАЕМ ВСЕ ФУНКЦИИ ГЛОБАЛЬНЫМИ ДЛЯ onclick
-// ============================================================
-window.showPage = showPage;
-window.setMessage = setMessage;
-window.hash = hash;
+// --- ЗАГРУЗКА ---
+function loadUsers() {
+    try {
+        const saved = localStorage.getItem('got_users');
+        if (saved) users = JSON.parse(saved);
+    } catch(e) { users = {}; }
+}
 
-// ============================================================
-// РЕГИСТРАЦИЯ
-// ============================================================
-function handleRegister() {
+// --- СОХРАНЕНИЕ ---
+function saveUsers() {
+    localStorage.setItem('got_users', JSON.stringify(users));
+}
+
+// --- ХЕШ ПАРОЛЯ ---
+function hash(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+        h = ((h << 5) - h) + str.charCodeAt(i);
+        h = h & h;
+    }
+    return h.toString(36);
+}
+
+// --- ПЕРЕКЛЮЧЕНИЕ СТРАНИЦ ---
+window.showPage = function(page) {
+    document.getElementById('page-login').classList.add('hide');
+    document.getElementById('page-register').classList.add('hide');
+    document.getElementById('page-game').classList.add('hide');
+    if (page === 'login') document.getElementById('page-login').classList.remove('hide');
+    else if (page === 'register') document.getElementById('page-register').classList.remove('hide');
+    else if (page === 'game') document.getElementById('page-game').classList.remove('hide');
+};
+
+// --- СООБЩЕНИЯ ---
+function setMessage(msg) {
+    const el = document.getElementById('game-message');
+    if (el) el.textContent = msg || '';
+}
+
+// --- РЕГИСТРАЦИЯ ---
+window.handleRegister = function() {
     const name = document.getElementById('reg-name').value.trim();
     const password = document.getElementById('reg-password').value;
     const nationality = document.getElementById('reg-nationality').value;
@@ -76,13 +105,10 @@ function handleRegister() {
         currentUser = name;
         enterGame();
     }, 1500);
-}
-window.handleRegister = handleRegister;
+};
 
-// ============================================================
-// ВХОД
-// ============================================================
-function handleLogin() {
+// --- ВХОД ---
+window.handleLogin = function() {
     const name = document.getElementById('login-name').value.trim();
     const password = document.getElementById('login-password').value;
     const errEl = document.getElementById('login-error');
@@ -109,24 +135,19 @@ function handleLogin() {
     localStorage.setItem('got_user', name);
     currentUser = name;
     enterGame();
-}
-window.handleLogin = handleLogin;
+};
 
-// ============================================================
-// ВХОД В ИГРУ
-// ============================================================
+// --- ВХОД В ИГРУ ---
 function enterGame() {
     const user = users[currentUser];
     if (!user) return;
 
-    showPage('game');
+    window.showPage('game');
     updateUI();
     setMessage('Добро пожаловать, ' + currentUser + '!');
 }
 
-// ============================================================
-// ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
-// ============================================================
+// --- ОБНОВЛЕНИЕ ИНТЕРФЕЙСА ---
 function updateUI() {
     const user = users[currentUser];
     if (!user) return;
@@ -142,10 +163,8 @@ function updateUI() {
     document.getElementById('menu-location').textContent = 'Таверна';
 }
 
-// ============================================================
-// ДЕЙСТВИЯ
-// ============================================================
-function eat() {
+// --- ДЕЙСТВИЯ ---
+window.eat = function() {
     const user = users[currentUser];
     if (!user) return;
     const g = user.game;
@@ -157,10 +176,9 @@ function eat() {
     setMessage('🍞 Вы поели! Еда +25.');
     updateUI();
     saveUsers();
-}
-window.eat = eat;
+};
 
-function rest() {
+window.rest = function() {
     const user = users[currentUser];
     if (!user) return;
     const g = user.game;
@@ -174,54 +192,40 @@ function rest() {
     setMessage('🛏️ Вы отдохнули! Усталость +30, HP +15.');
     updateUI();
     saveUsers();
-}
-window.rest = rest;
+};
 
-function talk() {
+window.talk = function() {
     const msgs = [
         '🍺 Трактирщик: "Добро пожаловать, путник!"',
         '🍺 Трактирщик: "Хочешь заработать? Помой посуду."',
         '🍺 Трактирщик: "Будь осторожен за воротами."'
     ];
     setMessage(msgs[Math.floor(Math.random() * msgs.length)]);
-}
-window.talk = talk;
+};
 
-// ============================================================
-// ЗАГЛУШКИ
-// ============================================================
-function openCharacter() { setMessage('👤 Персонаж (информация)'); }
-window.openCharacter = openCharacter;
+// --- ЗАГЛУШКИ ---
+window.openCharacter = function() { setMessage('👤 Персонаж (информация)'); };
+window.openInventory = function() { setMessage('🎒 Инвентарь (пока пустой)'); };
+window.openMap = function() { setMessage('🗺️ Карта (в разработке)'); };
 
-function openInventory() { setMessage('🎒 Инвентарь (пока пустой)'); }
-window.openInventory = openInventory;
-
-function openMap() { setMessage('🗺️ Карта (в разработке)'); }
-window.openMap = openMap;
-
-// ============================================================
-// ВЫХОД
-// ============================================================
-function handleLogout() {
+// --- ВЫХОД ---
+window.handleLogout = function() {
     localStorage.removeItem('got_user');
     currentUser = null;
-    showPage('login');
+    window.showPage('login');
     document.getElementById('login-name').value = '';
     document.getElementById('login-password').value = '';
     setMessage('');
-}
-window.handleLogout = handleLogout;
+};
 
-// ============================================================
-// ЗАПУСК
-// ============================================================
+// --- ЗАПУСК ---
 loadUsers();
 const savedUser = localStorage.getItem('got_user');
 if (savedUser && users[savedUser]) {
     currentUser = savedUser;
     enterGame();
 } else {
-    showPage('login');
+    window.showPage('login');
 }
 
 console.log('✅ Игра загружена! Пользователей:', Object.keys(users).length);
