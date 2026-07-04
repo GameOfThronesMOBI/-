@@ -78,9 +78,9 @@
                 <div class="action-group">
                     <p>⚡ Что делаете?</p>
                     <div id="actions-container">
-                        <button class="btn-game" onclick="window.eat()">🍞 Поесть (+25 еды)</button>
-                        <button class="btn-game" onclick="window.rest()">🛏️ Отдохнуть (10 МП)</button>
-                        <button class="btn-game" onclick="window.talk()">🗣️ Поговорить</button>
+                        <button class="btn-game" onclick="eat()">🍞 Поесть (+25 еды)</button>
+                        <button class="btn-game" onclick="rest()">🛏️ Отдохнуть (10 МП)</button>
+                        <button class="btn-game" onclick="talk()">🗣️ Поговорить</button>
                     </div>
                     <div id="game-message" class="game-msg"></div>
                 </div>
@@ -90,12 +90,6 @@
         <div class="footer">❄️ ЗИМА БЛИЗКО</div>
     </div>
 
-    <!-- МОДАЛЬНЫЕ ОКНА -->
-    <div id="modal-character" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>👤 ПЕРСОНАЖ</h3><button class="close-btn">✕</button></div><div id="modal-content"></div></div></div>
-    <div id="modal-inventory" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🎒 ИНВЕНТАРЬ</h3><button class="close-btn">✕</button></div><div id="modal-inventory-content"></div></div></div>
-    <div id="modal-map" class="modal-overlay hide"><div class="modal-box"><div class="modal-header"><h3>🗺️ ПЕРЕМЕЩЕНИЕ</h3><button class="close-btn">✕</button></div><div id="modal-map-content"></div></div></div>
-
-    <!-- ПОДКЛЮЧАЕМ JS -->
     <script src="js/main.js"></script>
 </body>
 </html>
