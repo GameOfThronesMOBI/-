@@ -1,41 +1,4 @@
 // ============================================================
-// ПРИВЯЗКА СОБЫТИЙ
-// ============================================================
-document.addEventListener('DOMContentLoaded', function() {
-    
-    document.getElementById('btn-login').addEventListener('click', handleLogin);
-    document.getElementById('btn-to-register').addEventListener('click', function() { showPage('register'); });
-    
-    document.getElementById('btn-register').addEventListener('click', handleRegister);
-    document.getElementById('btn-to-login').addEventListener('click', function() { showPage('login'); });
-    
-    document.getElementById('btn-logout').addEventListener('click', handleLogout);
-    document.getElementById('btn-character').addEventListener('click', openCharacter);
-    document.getElementById('btn-inventory').addEventListener('click', openInventory);
-    document.getElementById('btn-map').addEventListener('click', openMap);
-    document.getElementById('btn-log').addEventListener('click', openLog);
-    document.getElementById('btn-menu').addEventListener('click', openMainMenu);
-    document.getElementById('btn-online-list').addEventListener('click', showOnlineList);
-    
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', function(e) {
-            if (e.target === this) this.classList.add('hide');
-        });
-    });
-    
-    document.getElementById('close-character').addEventListener('click', function() { document.getElementById('modal-character').classList.add('hide'); });
-    document.getElementById('close-inventory').addEventListener('click', function() { document.getElementById('modal-inventory').classList.add('hide'); });
-    document.getElementById('close-map').addEventListener('click', closeMap);
-    document.getElementById('close-houses-btn').addEventListener('click', closeHouses);
-    document.getElementById('close-online').addEventListener('click', closeOnline);
-    document.getElementById('close-menu-btn').addEventListener('click', closeMenu);
-    document.getElementById('close-trade').addEventListener('click', function() { document.getElementById('modal-trade').classList.add('hide'); });
-    document.getElementById('close-guild').addEventListener('click', function() { document.getElementById('modal-guild').classList.add('hide'); });
-    document.getElementById('close-log').addEventListener('click', closeLog);
-    
-});
-
-// ============================================================
 // ЯДРО ИГРЫ
 // ============================================================
 
@@ -166,7 +129,7 @@ function handleLogin() {
     enterGame(name);
 }
 
-// --- ВХОД В ИГРУ ---
+// --- ИСПРАВЛЕНИЕ СТАРЫХ АККАУНТОВ ---
 function fixOldAccount(user) {
     if (!user) return user;
     if (!user.game) {
@@ -262,6 +225,7 @@ function fixOldAccount(user) {
     return user;
 }
 
+// --- ВХОД В ИГРУ ---
 function enterGame(name) {
     const user = users[name];
     if (!user) return;
@@ -334,14 +298,14 @@ function enterGame(name) {
 // --- ТАЙМЕРЫ ---
 function startAutoSave() {
     if (autoSaveInterval) clearInterval(autoSaveInterval);
-    autoSaveInterval = setInterval(() => {
+    autoSaveInterval = setInterval(function() {
         if (currentUser && users[currentUser]) saveData();
     }, 30000);
 }
 
 function startResourceSystem() {
     if (resourceInterval) clearInterval(resourceInterval);
-    resourceInterval = setInterval(() => {
+    resourceInterval = setInterval(function() {
         const user = users[currentUser];
         if (!user || !user.game.online) return;
         const g = user.game;
@@ -560,7 +524,7 @@ function updateActions() {
         actions.push({ id: 'refresh', label: '🔄 Обновить' });
     }
     
-    actions.forEach(a => {
+    actions.forEach(function(a) {
         const btn = document.createElement('button');
         btn.className = 'btn-game';
         btn.textContent = a.label;
@@ -638,7 +602,7 @@ function gameAction(action) {
             updateMenu(); saveData();
             break;
         case 'talk':
-            const msgs = [
+            var msgs = [
                 '🍺 Трактирщик: «Добро пожаловать, путник!»',
                 '🍺 Трактирщик: «Хочешь заработать? Помой посуду.»',
                 '🍺 Трактирщик: «Будь осторожен за воротами.»'
@@ -648,7 +612,7 @@ function gameAction(action) {
         case 'search':
             if (searchCooldown) { setMessage('⏳ Подождите 5 секунд.'); return; }
             searchCooldown = true;
-            setTimeout(() => { searchCooldown = false; }, 5000);
+            setTimeout(function() { searchCooldown = false; }, 5000);
             doSearch();
             break;
         case 'map': openMap(); break;
@@ -668,7 +632,7 @@ function gameAction(action) {
 function openMainMenu() {
     const modal = document.getElementById('modal-menu');
     const content = document.getElementById('modal-menu-content');
-    let html = '<div class="modal-section">';
+    var html = '<div class="modal-section">';
     html += '<button class="btn" style="margin:4px 0;" onclick="openHouses(); closeMenu();">🏘️ Дома</button>';
     html += '<button class="btn btn-secondary" style="margin-top:10px;" onclick="closeMenu()">Закрыть</button>';
     html += '</div>';
@@ -684,14 +648,14 @@ function openMap() {
     if (!user) return;
     const modal = document.getElementById('modal-map');
     const content = document.getElementById('modal-map-content');
-    const cityBuildings = ['Таверна', 'Рынок', 'Кузница', 'Оружейная лавка', 'Кожевник', 'Бронник', 'Плотник', 'Конюшня', 'Гильдия торговцев', 'Магистрат', 'Ворота', 'Королевский квартал', 'Торговый квартал', 'Квартал бедноты', 'Дом', 'Великая септа', 'Порт', 'Тюрьма', 'Дорога', 'Библиотека мейстеров', 'Гильдия наёмников', 'Бордель'];
-    let html = '<div class="modal-section"><h4>📍 ' + user.game.location.place + ' (ур. ' + (LOCATION_LEVELS[user.game.location.place] || 1) + ')</h4></div>';
+    var cityBuildings = ['Таверна', 'Рынок', 'Кузница', 'Оружейная лавка', 'Кожевник', 'Бронник', 'Плотник', 'Конюшня', 'Гильдия торговцев', 'Магистрат', 'Ворота', 'Королевский квартал', 'Торговый квартал', 'Квартал бедноты', 'Дом', 'Великая септа', 'Порт', 'Тюрьма', 'Дорога', 'Библиотека мейстеров', 'Гильдия наёмников', 'Бордель'];
+    var html = '<div class="modal-section"><h4>📍 ' + user.game.location.place + ' (ур. ' + (LOCATION_LEVELS[user.game.location.place] || 1) + ')</h4></div>';
     html += '<div class="modal-section">';
-    BUILDINGS.forEach(b => {
-        const bIsCity = cityBuildings.includes(b.id);
+    BUILDINGS.forEach(function(b) {
+        var bIsCity = cityBuildings.includes(b.id);
         if (user.game.outside && bIsCity) return;
         if (!user.game.outside && !bIsCity) return;
-        const isCurrent = b.id === user.game.location.place;
+        var isCurrent = b.id === user.game.location.place;
         html += '<div class="row">';
         html += '<span class="label">' + b.label + (isCurrent ? ' ⭐' : '') + '</span>';
         if (!isCurrent) {
@@ -715,8 +679,8 @@ function goToBuilding(building) {
     if (isBusy) { setMessage('⏳ Вы заняты.'); return; }
     if (building === g.location.place) { setMessage('📍 Вы уже здесь.'); return; }
     
-    const cityBuildings = ['Таверна', 'Рынок', 'Кузница', 'Оружейная лавка', 'Кожевник', 'Бронник', 'Плотник', 'Конюшня', 'Гильдия торговцев', 'Магистрат', 'Ворота', 'Королевский квартал', 'Торговый квартал', 'Квартал бедноты', 'Дом', 'Великая септа', 'Порт', 'Тюрьма'];
-    const targetIsCity = cityBuildings.includes(building);
+    var cityBuildings = ['Таверна', 'Рынок', 'Кузница', 'Оружейная лавка', 'Кожевник', 'Бронник', 'Плотник', 'Конюшня', 'Гильдия торговцев', 'Магистрат', 'Ворота', 'Королевский квартал', 'Торговый квартал', 'Квартал бедноты', 'Дом', 'Великая септа', 'Порт', 'Тюрьма'];
+    var targetIsCity = cityBuildings.includes(building);
     if (targetIsCity && g.outside) g.outside = false;
     else if (!targetIsCity && !g.outside) g.outside = true;
     g.location.place = building;
@@ -735,11 +699,11 @@ function goToBuilding(building) {
 function openLog() {
     const modal = document.getElementById('modal-log');
     const content = document.getElementById('modal-log-content');
-    let html = '<div class="modal-section"><h4>📜 ПОСЛЕДНИЕ СОБЫТИЯ</h4>';
+    var html = '<div class="modal-section"><h4>📜 ПОСЛЕДНИЕ СОБЫТИЯ</h4>';
     if (gameLog.length === 0) {
         html += '<p style="color:#6a5a48;">Пусто</p>';
     } else {
-        gameLog.slice(-20).reverse().forEach(entry => {
+        gameLog.slice(-20).reverse().forEach(function(entry) {
             html += '<p style="color:#b8a890;font-size:12px;padding:2px 0;">' + entry + '</p>';
         });
     }
@@ -752,10 +716,10 @@ function closeLog() { document.getElementById('modal-log').classList.add('hide')
 
 // --- ОНЛАЙН ---
 function updateOnline() {
-    const online = { global: 0, region: 0, location: 0 };
+    var online = { global: 0, region: 0, location: 0 };
     if (!currentUser || !users[currentUser]) return;
-    const cur = users[currentUser];
-    for (const name in users) {
+    var cur = users[currentUser];
+    for (var name in users) {
         if (users[name].game.online) {
             online.global++;
             if (cur && users[name].game.location.region === cur.game.location.region) online.region++;
@@ -771,9 +735,9 @@ function updateOnline() {
 function showOnlineList() {
     const modal = document.getElementById('modal-online');
     const content = document.getElementById('modal-online-content');
-    let html = '<div class="modal-section"><h4>👥 ИГРОКИ ОНЛАЙН</h4>';
-    let count = 0;
-    for (const name in users) {
+    var html = '<div class="modal-section"><h4>👥 ИГРОКИ ОНЛАЙН</h4>';
+    var count = 0;
+    for (var name in users) {
         if (users[name].game.online) {
             count++;
             html += '<div class="row"><span class="label">' + name + '</span><span class="value">ур. ' + users[name].game.level + ' | ' + users[name].game.location.place + '</span></div>';
@@ -791,10 +755,10 @@ function closeOnline() { document.getElementById('modal-online').classList.add('
 function openHouses() {
     const modal = document.getElementById('modal-houses');
     const content = document.getElementById('modal-houses-content');
-    let html = '<div class="modal-section"><h4>🏘️ ВЫБЕРИТЕ РЕГИОН</h4>';
-    const regions = Object.keys(HOUSES_DATA);
-    regions.forEach(region => {
-        const data = HOUSES_DATA[region];
+    var html = '<div class="modal-section"><h4>🏘️ ВЫБЕРИТЕ РЕГИОН</h4>';
+    var regions = Object.keys(HOUSES_DATA);
+    regions.forEach(function(region) {
+        var data = HOUSES_DATA[region];
         html += '<button class="btn" style="margin:4px 0;padding:10px;" onclick="showRegionHouses(\'' + region + '\')">' + region + ' (' + data.totalAcres.toLocaleString() + ' акров)</button>';
     });
     html += '<button class="btn btn-secondary" onclick="closeHouses()">Закрыть</button>';
@@ -804,13 +768,13 @@ function openHouses() {
 }
 
 function showRegionHouses(region) {
-    const data = HOUSES_DATA[region];
+    var data = HOUSES_DATA[region];
     if (!data) return;
     const modal = document.getElementById('modal-houses');
     const content = document.getElementById('modal-houses-content');
-    let html = '<div class="modal-section"><h4>🏘️ ' + region.toUpperCase() + '</h4>';
+    var html = '<div class="modal-section"><h4>🏘️ ' + region.toUpperCase() + '</h4>';
     html += '<p style="color:#6a5a48;margin-bottom:10px;">Столица: ' + data.capital + ' | Всего акров: ' + data.totalAcres.toLocaleString() + '</p>';
-    data.houses.forEach(house => {
+    data.houses.forEach(function(house) {
         html += '<button class="btn" style="margin:4px 0;padding:10px;text-align:left;" onclick="showHouseInfo(\'' + region + '\',\'' + house.id + '\')">';
         html += house.sigil + ' ' + house.name + ' (' + house.status + ') — ' + house.acres.toLocaleString() + ' акров';
         html += '</button>';
@@ -822,13 +786,13 @@ function showRegionHouses(region) {
 }
 
 function showHouseInfo(region, houseId) {
-    const data = HOUSES_DATA[region];
+    var data = HOUSES_DATA[region];
     if (!data) return;
-    const house = data.houses.find(h => h.id === houseId);
+    var house = data.houses.find(function(h) { return h.id === houseId; });
     if (!house) return;
     const modal = document.getElementById('modal-houses');
     const content = document.getElementById('modal-houses-content');
-    let html = '<div class="modal-section"><h4>🏘️ ДОМ ' + house.name.toUpperCase() + '</h4>';
+    var html = '<div class="modal-section"><h4>🏘️ ДОМ ' + house.name.toUpperCase() + '</h4>';
     html += '<div class="row"><span class="label">🦁 Герб</span><span class="value">' + house.sigil + '</span></div>';
     html += '<div class="row"><span class="label">🏰 Цитадель</span><span class="value">' + house.castle + '</span></div>';
     html += '<div class="row"><span class="label">👑 Сюзерен</span><span class="value">' + house.liege + '</span></div>';
@@ -871,10 +835,47 @@ function mobTurn() {}
 // ЗАПУСК
 // ============================================================
 loadData();
-const savedUser = localStorage.getItem('got_user');
+var savedUser = localStorage.getItem('got_user');
 if (savedUser && users[savedUser]) {
     currentUser = savedUser;
     enterGame(savedUser);
 } else {
     showPage('login');
 }
+
+// ============================================================
+// ПРИВЯЗКА СОБЫТИЙ
+// ============================================================
+window.addEventListener('load', function() {
+    
+    document.getElementById('btn-login').addEventListener('click', handleLogin);
+    document.getElementById('btn-to-register').addEventListener('click', function() { showPage('register'); });
+    
+    document.getElementById('btn-register').addEventListener('click', handleRegister);
+    document.getElementById('btn-to-login').addEventListener('click', function() { showPage('login'); });
+    
+    document.getElementById('btn-logout').addEventListener('click', handleLogout);
+    document.getElementById('btn-character').addEventListener('click', openCharacter);
+    document.getElementById('btn-inventory').addEventListener('click', openInventory);
+    document.getElementById('btn-map').addEventListener('click', openMap);
+    document.getElementById('btn-log').addEventListener('click', openLog);
+    document.getElementById('btn-menu').addEventListener('click', openMainMenu);
+    document.getElementById('btn-online-list').addEventListener('click', showOnlineList);
+    
+    document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === this) this.classList.add('hide');
+        });
+    });
+    
+    document.getElementById('close-character').addEventListener('click', function() { document.getElementById('modal-character').classList.add('hide'); });
+    document.getElementById('close-inventory').addEventListener('click', function() { document.getElementById('modal-inventory').classList.add('hide'); });
+    document.getElementById('close-map').addEventListener('click', closeMap);
+    document.getElementById('close-houses-btn').addEventListener('click', closeHouses);
+    document.getElementById('close-online').addEventListener('click', closeOnline);
+    document.getElementById('close-menu-btn').addEventListener('click', closeMenu);
+    document.getElementById('close-trade').addEventListener('click', function() { document.getElementById('modal-trade').classList.add('hide'); });
+    document.getElementById('close-guild').addEventListener('click', function() { document.getElementById('modal-guild').classList.add('hide'); });
+    document.getElementById('close-log').addEventListener('click', closeLog);
+    
+});
